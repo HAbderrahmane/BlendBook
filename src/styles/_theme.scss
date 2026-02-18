@@ -1,0 +1,39 @@
+body {
+  font-family: var(--font-family);
+  font-optical-sizing: auto;
+  color: var(--text-color);
+}
+
+.card {
+  padding: 24px;
+  border-radius: var(--radius);
+  border: var(--border);
+}
+
+.active-item {
+  background-color: var(--light);
+  color: white;
+  border-radius: var(--radius);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.btn {
+  font-weight: 500;
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  transition: background-color 0.4s;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--dark);
+}
