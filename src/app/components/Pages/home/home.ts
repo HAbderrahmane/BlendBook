@@ -5,6 +5,8 @@ import { Icon } from '../../Design/icon/icon';
 import { Loading } from '../../Design/loading/loading';
 import { CocktailsService } from '../../../Services/cocktails.service';
 import { Cocktail } from '../../../shared/Models/cocktail.model';
+import { IngredientsService } from '../../../Services/ingredients.service';
+import { Ingredient } from '../../../shared/Models/ingredient.model';
 
 @Component({
   selector: 'app-home',
@@ -15,12 +17,13 @@ import { Cocktail } from '../../../shared/Models/cocktail.model';
 })
 export class Home {
   private readonly cocktailsService = inject(CocktailsService);
+  private readonly ingredientsService = inject(IngredientsService);
   private readonly router = inject(Router);
   readonly alcoholicCocktailsResource = this.cocktailsService.createCocktailsResource(
     () =>
       ({
         page: 1,
-        perPage: 4,
+        perPage: 2,
         sortBy: 'created_at',
         sortDir: 'desc',
         alcoholic: true,
@@ -30,7 +33,7 @@ export class Home {
     () =>
       ({
         page: 1,
-        perPage: 4,
+        perPage: 2,
         sortBy: 'created_at',
         sortDir: 'desc',
         alcoholic: false,
@@ -41,6 +44,38 @@ export class Home {
     ...(this.alcoholicCocktailsResource.value().data ?? []),
     ...(this.nonAlcoholicCocktailsResource.value().data ?? []),
   ]);
+  readonly ingredientsAutoA = this.ingredientsService.createIngredientsAutocompleteResource(
+    () => 'a',
+    { data: [] },
+  );
+  readonly ingredientsAutoE = this.ingredientsService.createIngredientsAutocompleteResource(
+    () => 'e',
+    { data: [] },
+  );
+  readonly ingredientsAutoO = this.ingredientsService.createIngredientsAutocompleteResource(
+    () => 'o',
+    { data: [] },
+  );
+  readonly ingredients = computed(() => {
+    const groups = [
+      this.ingredientsAutoA.hasValue() ? (this.ingredientsAutoA.value().data ?? []) : [],
+      this.ingredientsAutoE.hasValue() ? (this.ingredientsAutoE.value().data ?? []) : [],
+      this.ingredientsAutoO.hasValue() ? (this.ingredientsAutoO.value().data ?? []) : [],
+    ];
+    const merged = groups.flat();
+    const unique = new Map<string, Ingredient>();
+    for (const ingredient of merged) {
+      unique.set(String(ingredient.id), ingredient);
+    }
+    return Array.from(unique.values());
+  });
+  readonly ingredientsLoading = computed(
+    () =>
+      this.ingredientsAutoA.isLoading() ||
+      this.ingredientsAutoE.isLoading() ||
+      this.ingredientsAutoO.isLoading(),
+  );
+  readonly featuredIngredients = computed(() => this.pickRandom(this.ingredients(), 4));
   readonly loading = computed(
     () => this.alcoholicCocktailsResource.isLoading() || this.nonAlcoholicCocktailsResource.isLoading(),
   );
@@ -64,6 +99,12 @@ export class Home {
   goToCocktailDetails(cocktail: Cocktail): void {
     this.router.navigate(['/cocktails'], {
       queryParams: { selected: cocktail.id },
+    });
+  }
+
+  goToIngredientDetails(ingredient: Ingredient): void {
+    this.router.navigate(['/ingredients'], {
+      queryParams: { selected: ingredient.id },
     });
   }
 
@@ -92,5 +133,19 @@ export class Home {
     }
 
     target.style.visibility = 'hidden';
+  }
+
+  private pickRandom<T>(source: T[], count: number): T[] {
+    if (source.length <= count) return source;
+    const clone = [...source];
+    for (let i = clone.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [clone[i], clone[j]] = [clone[j], clone[i]];
+    }
+    return clone.slice(0, count);
+  }
+
+  getIngredientImage(ingredient?: Ingredient): string | undefined {
+    return ingredient?.imageUrl;
   }
 }

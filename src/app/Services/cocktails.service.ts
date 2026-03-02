@@ -1,7 +1,6 @@
 import { httpResource, HttpResourceRef } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Cocktail } from '../shared/Models/cocktail.model';
-import { Ingredient } from '../shared/Models/ingredient.model';
 import { PagedResponse } from '../shared/Models/paged-response.model';
 
 export type SortDir = 'asc' | 'desc';
@@ -15,14 +14,6 @@ export interface GetCocktailsOptions {
   glass?: string;
   alcoholic?: boolean;
   ingredient?: string;
-}
-
-export interface GetIngredientsOptions {
-  page?: number;
-  perPage?: number;
-  search?: string;
-  sortBy?: string;
-  sortDir?: SortDir;
 }
 
 @Injectable()
@@ -54,6 +45,26 @@ export class CocktailsService {
       },
       {
         parse: (raw) => this.mapCocktailEntity(raw),
+      },
+    );
+  }
+
+  createCocktailsAutocompleteResource(
+    query: () => string | null | undefined,
+    defaultValue: PagedResponse<Cocktail> = { data: [] },
+  ): HttpResourceRef<PagedResponse<Cocktail>> {
+    return httpResource(
+      () => {
+        const q = query()?.trim();
+        if (!q) return undefined;
+        return {
+          url: `${this.baseUrl}/cocktails/autocomplete`,
+          params: { q },
+        };
+      },
+      {
+        parse: (raw) => this.mapCocktailsPage(raw),
+        defaultValue,
       },
     );
   }
@@ -108,43 +119,6 @@ export class CocktailsService {
     };
   }
 
-  buildIngredientsResourceRequest(options?: GetIngredientsOptions) {
-    return {
-      url: `${this.baseUrl}/ingredients`,
-      params: this.buildIngredientsResourceParams(options),
-    };
-  }
-
-  buildIngredientByIdResourceRequest(id: number | string) {
-    return {
-      url: `${this.baseUrl}/ingredients/${id}`,
-    };
-  }
-
-  mapIngredientsPage(raw: unknown): PagedResponse<Ingredient> {
-    const source = raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {};
-    const rawData = Array.isArray(source['data']) ? (source['data'] as unknown[]) : [];
-
-    return {
-      data: rawData.map((item) => this.mapIngredientEntity(item)),
-      meta: source['meta'] as PagedResponse<Ingredient>['meta'],
-      pagination: source['pagination'] as PagedResponse<Ingredient>['pagination'],
-    };
-  }
-
-  mapIngredientEntity(raw: unknown): Ingredient {
-    const item = raw as Record<string, unknown>;
-
-    return {
-      id: (item['id'] as number | string) ?? '',
-      name: String(item['name'] ?? ''),
-      imageUrl: this.normalizeImageUrl(item['imageUrl']),
-      description: item['description'] ? String(item['description']) : undefined,
-      type: item['type'] ? String(item['type']) : undefined,
-      abv: typeof item['abv'] === 'number' ? (item['abv'] as number) : undefined,
-    };
-  }
-
   private buildCocktailsResourceParams(options?: GetCocktailsOptions) {
     const params: Record<string, string | number | boolean> = {};
 
@@ -160,20 +134,6 @@ export class CocktailsService {
     if (options?.glass) params['glass'] = options.glass;
     if (options?.alcoholic != null) params['alcoholic'] = options.alcoholic;
     if (options?.ingredient) params['ingredient'] = options.ingredient;
-
-    return params;
-  }
-
-  private buildIngredientsResourceParams(options?: GetIngredientsOptions) {
-    const params: Record<string, string | number | boolean> = {};
-
-    if (options?.page != null) params['page'] = options.page;
-    if (options?.perPage != null) params['limit'] = options.perPage;
-    if (options?.search) params['search'] = options.search;
-
-    if (options?.sortBy && options?.sortDir) {
-      params['sort'] = `${options.sortBy}_${options.sortDir}`;
-    }
 
     return params;
   }

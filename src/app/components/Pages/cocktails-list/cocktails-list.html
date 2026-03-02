@@ -1,36 +1,40 @@
 <div class="title-row mb-20">
-  <h2 class="flex align-items-center gap-12">
+  <app-round-button class="title-btn" (clicked)="resetPagination()">
     <app-icon name="list" [size]="25" ariaLabel="Liste des cocktails" />
     Liste des cocktails
-  </h2>
+  </app-round-button>
 </div>
+
+<div class="list-controls mb-20">
+  <app-round-button class="swap-btn" (clicked)="toggleAlcoholic()">
+    <app-icon
+      [name]="alcoholicOnly() ? 'wine' : 'wine-off'"
+      [size]="20"
+      [ariaLabel]="alcoholicOnly() ? 'Liste alcoolisee' : 'Liste sans alcool'"
+    />
+    {{ alcoholicOnly() ? 'Liste alcoolisee' : 'Liste sans alcool' }}
+  </app-round-button>
+  <app-search-bar
+    [value]="searchTerm()"
+    placeholder="Rechercher un cocktail..."
+    (submitted)="applySearch($event)"
+  />
+</div>
+
+<app-sorting
+  class="sort-row mb-20"
+  [sortBy]="sortBy()"
+  [alcoholicDir]="alcoholicSortDir()"
+  [createdAtDir]="createdAtSortDir()"
+  (alcoholicToggle)="toggleAlcoholicSort()"
+  (createdAtToggle)="toggleCreatedAtSort()"
+/>
 
 @if (loading()) {
   <app-loading class="mb-20" />
 } @else if (error()) {
   <div class="mb-20">{{ error() }}</div>
 } @else {
-  <div class="list-controls mb-20">
-    <app-round-button class="swap-btn" (clicked)="toggleAlcoholic()">
-      <app-icon name="glass" [size]="16" ariaLabel="Changer la liste" />
-      {{ alcoholicOnly() ? 'Liste alcoolisee' : 'Liste sans alcool' }}
-    </app-round-button>
-    <app-search-bar
-      [value]="searchTerm()"
-      placeholder="Rechercher un cocktail..."
-      (submitted)="applySearch($event)"
-    />
-  </div>
-
-  <app-sorting
-    class="sort-row mb-20"
-    [sortBy]="sortBy()"
-    [alcoholicDir]="alcoholicSortDir()"
-    [createdAtDir]="createdAtSortDir()"
-    (alcoholicToggle)="toggleAlcoholicSort()"
-    (createdAtToggle)="toggleCreatedAtSort()"
-  />
-
   <ul
     #cocktailsListEl
     class="cocktails-list-items"
@@ -71,7 +75,7 @@
 
   <div class="list-actions">
     <app-round-button class="add-btn" (clicked)="openAddCocktailModal()">
-      <app-icon name="circle-plus-solid-full" [size]="18" ariaLabel="Ajouter cocktail" />
+      <app-icon name="circle-plus-solid-full" [size]="25" ariaLabel="Ajouter cocktail" />
       Add cocktail
     </app-round-button>
   </div>
@@ -97,15 +101,14 @@
       <div class="add-cocktail-modal__header">
         <h3>{{ isEditMode() ? 'Editer le cocktail' : 'Nouveau cocktail' }}</h3>
         <app-round-button [iconOnly]="true" (clicked)="closeAddCocktailModal()">
-          <app-icon name="xmark-solid-full" [size]="16" ariaLabel="Fermer" />
+          <app-icon name="xmark-solid-full" [size]="25" ariaLabel="Fermer" />
         </app-round-button>
       </div>
       <app-add-cocktail-form
         [initialValue]="formSeed()"
-        [submitLabel]="isEditMode() ? 'Enregistrer' : 'Ajouter le cocktail'"
+        [submitLabel]="'Enregistrer'"
         (submitCocktail)="onCocktailCreated($event)"
       />
     </div>
   </div>
 }
-

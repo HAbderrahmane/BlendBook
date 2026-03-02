@@ -1,0 +1,131 @@
+<section class="ingredients-page card">
+  <div class="ingredients-title">
+    <app-round-button class="title-btn" (clicked)="resetPagination()">
+      <app-icon name="hungerbox-cafe" [size]="24" ariaLabel="Ingredients" />
+      Ingredients
+    </app-round-button>
+  </div>
+
+  <div class="ingredients-controls">
+    <app-search-bar
+      [value]="searchTerm()"
+      placeholder="Rechercher un ingredient..."
+      (submitted)="applySearch($event)"
+    />
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (error()) {
+    <p class="ingredients-error">{{ error() }}</p>
+  } @else {
+    <ul #ingredientsListEl class="ingredients-list" tabindex="0" (keydown)="onListKeydown($event)">
+      @for (ingredient of ingredients(); track ingredient.id) {
+        <li class="ingredients-row">
+          <button
+            type="button"
+            class="ingredients-item"
+            [class.is-expanded]="isExpanded(ingredient.id)"
+            [class.is-focused]="isFocused(ingredient.id)"
+            (click)="toggleIngredientDetails(ingredient)"
+            (focus)="setFocusedIngredient(ingredient.id)"
+          >
+            <div class="ingredients-item__main">
+              @if (ingredient.imageUrl) {
+                <img
+                  [src]="ingredient.imageUrl"
+                  [alt]="ingredient.name"
+                  class="ingredients-thumb"
+                />
+              }
+              <div class="ingredients-item__text">
+                <h3>{{ ingredient.name }}</h3>
+                @if (ingredient.type) {
+                  <p>{{ ingredient.type }}</p>
+                }
+              </div>
+            </div>
+            <div class="ingredients-item__end">
+              @if (ingredient.abv != null) {
+                <span class="ingredients-item__abv">{{ ingredient.abv }}% ABV</span>
+              }
+              <span class="ingredients-item__chevron">
+                <app-icon
+                  [name]="isExpanded(ingredient.id) ? 'chevrons-up' : 'chevrons-down'"
+                  [size]="25"
+                  ariaLabel="Toggle details"
+                />
+              </span>
+            </div>
+          </button>
+
+          @if (isExpanded(ingredient.id)) {
+            <div
+              #ingredientDetailsEl
+              class="ingredient-details"
+              tabindex="0"
+              (keydown.enter)="onDetailsEnter($event)"
+            >
+              @if (detailsLoading()) {
+                <app-loading />
+              } @else {
+                <div class="ingredient-scene">
+                  <div class="ingredient-orbit">
+                    @for (
+                      point of detailPoints(selectedIngredient());
+                      track point.label;
+                      let i = $index
+                    ) {
+                      <div
+                        class="detail-point-wrap"
+                        [class.is-name-point]="i === 0"
+                        [style.--point-index]="i"
+                        [style.--point-count]="detailPoints(selectedIngredient()).length"
+                      >
+                        <div class="detail-point">
+                          <strong>{{ point.label }}</strong>
+                          <span>{{ point.value }}</span>
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="ingredient-center">
+                    @if (selectedIngredient()?.imageUrl) {
+                      <img
+                        [src]="selectedIngredient()!.imageUrl"
+                        [alt]="selectedIngredient()!.name"
+                      />
+                    } @else {
+                      <div class="ingredient-center__placeholder">
+                        {{ selectedIngredient()?.name || ingredient.name }}
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                @if (selectedIngredient()?.description) {
+                  <div class="ingredient-description">
+                    <strong>Description</strong>
+                    <p>{{ selectedIngredient()!.description }}</p>
+                  </div>
+                }
+              }
+            </div>
+          }
+        </li>
+      }
+    </ul>
+
+    <div class="ingredients-footer">
+      <p class="ingredients-info">
+        Page {{ currentPage() }} / {{ totalPages() }} - {{ totalCount() }} ingredients
+      </p>
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  }
+</section>

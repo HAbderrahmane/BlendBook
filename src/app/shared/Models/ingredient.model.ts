@@ -5,4 +5,7 @@ export interface Ingredient {
   description?: string;
   type?: string;
   abv?: number; // alcool ??
+  containsAlcohol?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }

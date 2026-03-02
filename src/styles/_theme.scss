@@ -52,8 +52,8 @@ body {
 }
 
 app-round-button.is-icon-only .app-btn-round {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   padding: 0;
 }
 
@@ -63,14 +63,14 @@ app-round-button.is-icon-only .app-btn-round {
 }
 
 .app-btn-square.is-icon-only {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   padding: 0;
 }
 
 app-square-button.is-icon-only .app-btn-square {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   padding: 0;
 }
 
@@ -98,19 +98,37 @@ app-round-button.add-btn .app-btn-round:hover {
   color: var(--surface-solid);
 }
 
-app-round-button.add-btn app-icon:hover {
+app-round-button.swap-btn .app-btn-round {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-pill);
+  background-color: var(--primary);
   color: var(--surface-solid);
+}
+
+app-round-button.swap-btn .app-btn-round:hover {
+  background-color: var(--dark);
+  color: var(--surface-solid);
+}
+
+app-round-button.add-btn .app-btn-round:hover app-icon,
+app-round-button.swap-btn .app-btn-round:hover app-icon,
+app-cocktails-details app-round-button.like-btn .app-btn-round:hover app-icon {
+  color: #610c63;
 }
 
 app-cocktails-details app-round-button.like-btn .app-btn-round {
   min-height: 42px;
   padding: 8px 14px;
-  border: 1px solid var(--border-soft);
-  background-color: var(--surface-soft);
+  border: 1px solid var(--primary);
+  background-color: var(--primary);
+  color: var(--surface-solid);
 }
 
 app-cocktails-details app-round-button.like-btn .app-btn-round:hover {
-  background-color: var(--action-hover-soft);
+  background-color: var(--dark);
+  color: var(--surface-solid);
 }
 
 .app-pagination {

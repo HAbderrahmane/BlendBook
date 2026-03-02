@@ -32,6 +32,7 @@ import {
 export class CocktailsList {
   private readonly cocktailsService = inject(CocktailsService);
   private readonly mockStorageKey = 'cocktails.mock.items.v1';
+  private readonly pageStorageKey = 'cocktails.page.v1';
   @ViewChild('cocktailsListEl') private cocktailsListEl?: ElementRef<HTMLUListElement>;
   private readonly restoreListFocusPending = signal(false);
 
@@ -40,7 +41,7 @@ export class CocktailsList {
   preselectedId = input<Cocktail['id'] | null>(null);
 
   readonly selectedId = signal<Cocktail['id'] | null>(null);
-  readonly currentPage = signal(1);
+  readonly currentPage = signal(this.readStoredPage());
   readonly searchTerm = signal('');
   readonly alcoholicOnly = signal(true);
   readonly sortBy = signal<SortBy>('alcoholic');
@@ -53,44 +54,73 @@ export class CocktailsList {
   readonly formSeed = signal<NewCocktailFormValue | null>(null);
   readonly localCocktails = signal<Cocktail[]>([]);
   readonly localEdits = signal<Record<string, Cocktail>>({});
+  readonly isSearchMode = computed(() => !!this.searchTerm().trim());
   readonly cocktailsResource = this.cocktailsService.createCocktailsResource(
     () => ({
       page: this.currentPage(),
       perPage: this.pageSize,
-      search: this.searchTerm() || undefined,
       alcoholic: this.preselectedId() == null ? this.alcoholicOnly() : undefined,
       sortBy: this.sortBy(),
       sortDir: this.sortDir(),
     }),
     { data: [] },
   );
+  readonly cocktailsAutocompleteResource = this.cocktailsService.createCocktailsAutocompleteResource(
+    () => this.searchTerm(),
+    { data: [] },
+  );
+  readonly preselectedCocktailResource = this.cocktailsService.createCocktailByIdResource(() =>
+    this.preselectedId(),
+  );
 
   readonly filteredLocalCocktails = computed(() =>
     this.localCocktails().filter((cocktail) => this.matchesCurrentFilters(cocktail)),
   );
 
+  readonly remoteCocktails = computed(() =>
+    this.isSearchMode()
+      ? (this.cocktailsAutocompleteResource.value().data ?? [])
+      : (this.cocktailsResource.value().data ?? []),
+  );
+
   readonly cocktails = computed(() => {
     const edits = this.localEdits();
-    const merged = [...this.filteredLocalCocktails(), ...(this.cocktailsResource.value().data ?? [])]
-      .map((cocktail) => edits[String(cocktail.id)] ?? cocktail);
-    return merged.filter((cocktail) => this.matchesCurrentFilters(cocktail));
+    const base = [...this.filteredLocalCocktails(), ...this.remoteCocktails()];
+    const preselected = this.preselectedCocktailResource.value();
+    const withPreselected =
+      preselected && !base.some((cocktail) => String(cocktail.id) === String(preselected.id))
+        ? [preselected, ...base]
+        : base;
+    const merged = withPreselected.map(
+      (cocktail) => edits[String(cocktail.id)] ?? cocktail,
+    );
+    const filtered = merged.filter((cocktail) => this.matchesCurrentFilters(cocktail));
+    return this.sortCocktails(filtered);
   });
-  readonly loading = computed(() => this.cocktailsResource.isLoading());
+  readonly loading = computed(() =>
+    this.isSearchMode() ? this.cocktailsAutocompleteResource.isLoading() : this.cocktailsResource.isLoading(),
+  );
   readonly error = computed(() =>
-    this.cocktailsResource.error() ? 'Impossible de charger les cocktails.' : null,
+    (this.isSearchMode() ? this.cocktailsAutocompleteResource.error() : this.cocktailsResource.error())
+      ? 'Impossible de charger les cocktails.'
+      : null,
   );
   readonly totalPages = computed(
-    () =>
-      this.cocktailsResource.value().pagination?.pages ??
-      this.cocktailsResource.value().meta?.totalPages ??
-      1,
+    () => {
+      const source = this.isSearchMode()
+        ? this.cocktailsAutocompleteResource.value()
+        : this.cocktailsResource.value();
+      return source.pagination?.pages ?? source.meta?.totalPages ?? 1;
+    },
   );
   readonly totalCount = computed(
-    () =>
-      (this.cocktailsResource.value().pagination?.count ??
-        this.cocktailsResource.value().meta?.totalItems ??
-        this.cocktailsResource.value().data?.length ??
-        0) + this.filteredLocalCocktails().length,
+    () => {
+      const source = this.isSearchMode()
+        ? this.cocktailsAutocompleteResource.value()
+        : this.cocktailsResource.value();
+      const remoteCount = source.pagination?.count ?? source.meta?.totalItems ?? source.data?.length ?? 0;
+      return remoteCount + this.filteredLocalCocktails().length;
+    },
   );
   readonly isEditMode = computed(() => this.editingCocktailId() != null);
 
@@ -98,6 +128,9 @@ export class CocktailsList {
     this.loadMockCocktails();
     effect(() => {
       this.loadingChange.emit(this.loading());
+    });
+    effect(() => {
+      this.persistCurrentPage(this.currentPage());
     });
     effect(() => {
       if (!this.restoreListFocusPending() || this.loading()) return;
@@ -150,6 +183,14 @@ export class CocktailsList {
     }
   }
 
+  resetPagination(): void {
+    if (this.currentPage() !== 1) {
+      this.currentPage.set(1);
+    }
+    this.resetSelection();
+    this.restoreListFocusPending.set(true);
+  }
+
   toggleAlcoholic(): void {
     this.resetSelection();
     this.alcoholicOnly.update((value) => !value);
@@ -168,7 +209,6 @@ export class CocktailsList {
     this.alcoholicSortDir.set(nextDir);
     this.sortBy.set('alcoholic');
     this.sortDir.set(nextDir);
-    this.alcoholicOnly.set(nextDir === 'desc');
     this.currentPage.set(1);
   }
 
@@ -332,6 +372,28 @@ export class CocktailsList {
     );
   }
 
+  private sortCocktails(items: Cocktail[]): Cocktail[] {
+    const dir = this.sortDir() === 'asc' ? 1 : -1;
+    const by = this.sortBy();
+    const toTimestamp = (value: Date | undefined): number =>
+      value instanceof Date && !Number.isNaN(value.getTime()) ? value.getTime() : 0;
+    const byName = (a: Cocktail, b: Cocktail): number => a.name.localeCompare(b.name);
+
+    return [...items].sort((a, b) => {
+      if (by === 'created_at') {
+        const delta = toTimestamp(a.created_at) - toTimestamp(b.created_at);
+        if (delta !== 0) return delta * dir;
+        return byName(a, b) * dir;
+      }
+
+      const av = a.alcoholic === true ? 1 : 0;
+      const bv = b.alcoholic === true ? 1 : 0;
+      const alcoholicDelta = av - bv;
+      if (alcoholicDelta !== 0) return alcoholicDelta * dir;
+      return byName(a, b) * dir;
+    });
+  }
+
   private loadMockCocktails(): void {
     if (typeof window === 'undefined') return;
 
@@ -382,6 +444,18 @@ export class CocktailsList {
       edits: Object.values(this.localEdits()),
     };
     window.localStorage.setItem(this.mockStorageKey, JSON.stringify(payload));
+  }
+
+  private readStoredPage(): number {
+    if (typeof window === 'undefined') return 1;
+    const raw = window.localStorage.getItem(this.pageStorageKey);
+    const parsed = raw ? Number(raw) : NaN;
+    return Number.isFinite(parsed) && parsed > 0 ? Math.trunc(parsed) : 1;
+  }
+
+  private persistCurrentPage(page: number): void {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(this.pageStorageKey, String(Math.max(1, Math.trunc(page))));
   }
 
   private toFormValue(cocktail: Cocktail | null): NewCocktailFormValue {

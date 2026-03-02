@@ -76,7 +76,7 @@
   .like-label {
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--surface-solid);
   }
 
   .info-block {
@@ -107,7 +107,7 @@
   }
 
   .chip-group {
-    margin-top: 12px;
+    margin: 10px 0;
 
     h3 {
       margin: 0 0 8px;

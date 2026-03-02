@@ -1,6 +1,6 @@
 <app-round-button class="header-btn brand-btn" [active]="isActive('/home')" (clicked)="go('/home')">
   <app-icon name="drink" [size]="24" ariaLabel="Cocktails" />
-  <span class="brand-text">Cocktails</span>
+  <span class="brand-text">Blendbook</span>
 </app-round-button>
 
 <nav class="header-nav">
@@ -9,7 +9,15 @@
     [active]="isActive('/cocktails')"
     (clicked)="go('/cocktails')"
   >
-    <app-icon name="list" [size]="18" ariaLabel="Liste des cocktails" />
+    <app-icon name="list" [size]="25" ariaLabel="Liste des cocktails" />
+  </app-round-button>
+
+  <app-round-button
+    class="header-btn"
+    [active]="isActive('/ingredients')"
+    (clicked)="go('/ingredients')"
+  >
+    <app-icon name="hungerbox-cafe" [size]="25" ariaLabel="Liste des ingredients" />
   </app-round-button>
 
   <app-square-button
@@ -19,7 +27,7 @@
     (clicked)="toggleCartDialog()"
   >
     <span class="cart-square" aria-hidden="true"></span>
-    <app-icon name="cart" [size]="20" ariaLabel="Panier" />
+    <app-icon name="cart" [size]="25" ariaLabel="Panier" />
     @if (likedCount() > 0) {
       <span class="cart-badge">{{ likedCount() }}</span>
     }
@@ -32,7 +40,7 @@
       <div class="cart-dialog__head">
         <h3>Cart</h3>
         <app-round-button [iconOnly]="true" (clicked)="closeCartDialog()">
-          <app-icon name="xmark-solid-full" [size]="14" ariaLabel="Fermer" />
+          <app-icon name="xmark-solid-full" [size]="25" ariaLabel="Fermer" />
         </app-round-button>
       </div>
       <app-cart

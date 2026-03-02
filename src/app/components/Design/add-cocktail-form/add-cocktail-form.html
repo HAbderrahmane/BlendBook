@@ -76,7 +76,10 @@
   />
 
   <div class="add-cocktail-form__actions">
-    <app-round-button [class.is-disabled]="!isValid()" (clicked)="submit()">
+    <app-round-button class="add-btn" [class.is-disabled]="!isValid()" (clicked)="submit()">
+      @if (isSaveAction()) {
+        <app-icon name="save" [size]="20" ariaLabel="Enregistrer" />
+      }
       {{ submitLabel() }}
     </app-round-button>
   </div>

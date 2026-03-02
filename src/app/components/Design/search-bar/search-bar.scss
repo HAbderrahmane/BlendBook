@@ -1,19 +1,25 @@
 :host {
   .search-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    position: relative;
+    width: min(460px, 100%);
   }
 
   .search-input {
-    min-width: 240px;
+    width: 100%;
+    min-width: 340px;
     border: 1px solid var(--gray-100);
     border-radius: var(--radius-pill);
-    padding: 8px 12px;
+    padding: 8px 56px 8px 14px;
     font: inherit;
     background: var(--surface-solid);
     color: var(--text-color);
+  }
+
+  .search-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
@@ -24,7 +30,6 @@
     }
 
     .search-input {
-      flex: 1;
       min-width: 0;
     }
   }

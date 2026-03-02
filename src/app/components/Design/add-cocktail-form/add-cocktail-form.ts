@@ -1,6 +1,7 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { RoundButton } from '../buttons/round-button/round-button';
 import { AppInput } from '../input/input';
+import { Icon } from '../icon/icon';
 
 export interface NewCocktailFormValue {
   name: string;
@@ -17,13 +18,14 @@ export interface NewCocktailFormValue {
 @Component({
   selector: 'app-add-cocktail-form',
   standalone: true,
-  imports: [AppInput, RoundButton],
+  imports: [AppInput, RoundButton, Icon],
   templateUrl: './add-cocktail-form.html',
   styleUrl: './add-cocktail-form.scss',
 })
 export class AddCocktailForm {
   readonly initialValue = input<NewCocktailFormValue | null>(null);
   readonly submitLabel = input('Ajouter le cocktail');
+  readonly isSaveAction = computed(() => this.submitLabel().trim().toLowerCase() === 'enregistrer');
 
   readonly name = signal('');
   readonly imageUrl = signal('');

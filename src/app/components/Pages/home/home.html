@@ -18,7 +18,7 @@
           experiences signature.
         </p>
         <app-round-button class="hero-cta" (clicked)="goToCocktails()">
-          <app-icon name="drink" [size]="18" ariaLabel="Explorer les cocktails" />
+          <app-icon name="drink" [size]="25" ariaLabel="Explorer les cocktails" />
           Explorer les cocktails
         </app-round-button>
       </div>
@@ -48,6 +48,27 @@
             <div class="drink-meta">
               <h3>{{ c.name }}</h3>
               <p>{{ c.alcoholic ? 'Alcoolise' : 'Sans alcool' }}</p>
+            </div>
+          </article>
+        }
+        @for (ing of featuredIngredients(); track ing.id) {
+          <article
+            class="ingredient-card"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="'Voir details de ' + ing.name"
+            (click)="goToIngredientDetails(ing)"
+            (keydown.enter)="goToIngredientDetails(ing)"
+            (keydown.space)="goToIngredientDetails(ing); $event.preventDefault()"
+          >
+            @if (getIngredientImage(ing)) {
+              <img [src]="getIngredientImage(ing)" [alt]="ing.name" />
+            }
+            <div class="ingredient-meta">
+              <h3>{{ ing.name }}</h3>
+              @if (ing.type) {
+                <p>{{ ing.type }}</p>
+              }
             </div>
           </article>
         }

@@ -1,10 +1,10 @@
 import { Component, effect, input, output, signal } from '@angular/core';
 import { RoundButton } from '../buttons/round-button/round-button';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-search-bar',
-  standalone: true,
-  imports: [RoundButton],
+  imports: [RoundButton, Icon],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.scss',
 })
@@ -19,6 +19,12 @@ export class SearchBar {
     effect(() => {
       this.query.set(this.value());
     });
+  }
+
+  onInput(event: Event): void {
+    const value = (event.target as HTMLInputElement | null)?.value ?? '';
+    this.query.set(value);
+    this.submit();
   }
 
   submit(): void {

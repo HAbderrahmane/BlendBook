@@ -20,10 +20,19 @@
   .title-row {
     display: flex;
     align-items: center;
+  }
 
-    h2 {
-      margin: 0;
-    }
+  app-round-button.title-btn .app-btn-round {
+    border: 1px solid var(--gray-100);
+    background: var(--surface-solid);
+    color: var(--text-color);
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+
+  app-round-button.title-btn .app-btn-round:hover {
+    background: var(--active-soft);
+    color: var(--primary);
   }
 
   .list-controls {
