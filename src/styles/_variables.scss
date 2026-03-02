@@ -1,13 +1,16 @@
 :root {
   --font-family: 'Montserrat', sans-serif;
-  --text-color: #222;
-  --gray-100: #dfe6e9;
-  --gray-700: #2c3a47;
-  --light: #e9d5ff;
-  --primary: #7e22ce;
-  --dark: #3b0764;
-  --success: #22c55e;
-  --danger: #dc2626;
+  --text-color: #5f5c58;
+  --gray-100: #d8c3a5;
+  --gray-700: #8e8d8a;
+  --light: #eae7dc;
+  --primary: #e85a4f;
+  --dark: #e98074;
+  --dark-rose: #e85a4f;
+  --header-bg: #8e8d8a;
+  --header-bg-hover: rgba(234, 231, 220, 0.28);
+  --header-square: rgba(216, 195, 165, 0.72);
+  --header-square-hover: rgba(233, 128, 116, 0.8);
 
   --border: 1px solid var(--gray-100);
   --radius: 24px;

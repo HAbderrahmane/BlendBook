@@ -1,0 +1,74 @@
+@if (loading()) {
+  <app-loading />
+} @else if (error()) {
+  <section class="home-shell">
+    <div class="home-error card">{{ error() }}</div>
+  </section>
+} @else {
+  <section class="home-shell">
+    <section class="hero">
+      <div class="hero-media">
+        <img class="hero-cover" src="/cover.svg" alt="Cocktail cover" />
+      </div>
+      <div class="hero-content">
+        <p class="hero-kicker">Drink Atelier</p>
+        <h1>Craft Cocktails, Antique Spirit</h1>
+        <p>
+          Une home inspiree Antique Cafe, orientee cocktails : ambiance immersive, menu visuel et
+          experiences signature.
+        </p>
+        <app-round-button class="hero-cta" (clicked)="goToCocktails()">
+          <app-icon name="drink" [size]="18" ariaLabel="Explorer les cocktails" />
+          Explorer les cocktails
+        </app-round-button>
+      </div>
+    </section>
+
+    <section class="section menu-showcase">
+      <h2>Selection du Moment</h2>
+      <div class="drink-grid">
+        @for (c of featuredCocktails(); track c.id) {
+          <article
+            class="drink-card"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="'Voir details de ' + c.name"
+            (click)="goToCocktailDetails(c)"
+            (keydown.enter)="goToCocktailDetails(c)"
+            (keydown.space)="goToCocktailDetails(c); $event.preventDefault()"
+          >
+            @if (getImageUrl(c)) {
+              <img
+                [src]="getImageUrl(c)"
+                [alt]="c.name"
+                [attr.data-alt-src]="getAlternativeImageUrl(c) ?? null"
+                (error)="onCardImageError($event)"
+              />
+            }
+            <div class="drink-meta">
+              <h3>{{ c.name }}</h3>
+              <p>{{ c.alcoholic ? 'Alcoolise' : 'Sans alcool' }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+
+    <section class="section story card">
+      <div class="story-copy">
+        <h2>About The Bar</h2>
+        <p>
+          Une approche moderne des classiques : textures, verrerie et aromatiques. Le style reprend
+          l'esprit Antique Cafe avec une direction full drinks.
+        </p>
+        <p>
+          Le menu ci-dessus est alimente dynamiquement depuis l'API cocktails pour garder une home
+          vivante.
+        </p>
+      </div>
+      @if (secondaryImage()) {
+        <img class="story-image" [src]="secondaryImage()" alt="Cocktail highlight" />
+      }
+    </section>
+  </section>
+}

@@ -1,22 +1,12 @@
 import { Component } from '@angular/core';
-import { CocktailsDetails } from './components/cocktails/cocktails-details/cocktails-details';
-import { Cocktails } from './components/cocktails/cocktails/cocktails';
-import { CocktailsList } from './components/cocktails/cocktails-list/cocktails-list';
-import { Footer } from './components/footer/footer';
-import { Header } from './components/header/header';
+import { RouterOutlet } from '@angular/router';
+import { Footer } from './components/Design/footer/footer';
+import { Header } from './components/Design/header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [Footer, Cocktails, Header],
-  template: ` <app-header></app-header>
-    <app-cocktails class="flex-auto"></app-cocktails>
-    <app-footer></app-footer>`,
-  styles: `
-    :host {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-  `,
+  imports: [Footer, Header, RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {}

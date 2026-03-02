@@ -1,0 +1,49 @@
+@if (totalPages() > 1) {
+  <nav class="app-pagination" aria-label="Pagination">
+    <div class="app-pagination__pages">
+      <button
+        type="button"
+        class="app-pagination__btn"
+        [disabled]="currentPage() <= 1"
+        (click)="goToPage(currentPage() - 1)"
+      >
+        Precedent
+      </button>
+
+      @for (p of visiblePages(); track p) {
+        <button
+          type="button"
+          class="app-pagination__btn"
+          [class.is-active]="p === currentPage()"
+          (click)="goToPage(p)"
+        >
+          {{ p }}
+        </button>
+      }
+
+      <button
+        type="button"
+        class="app-pagination__btn"
+        [disabled]="currentPage() >= totalPages()"
+        (click)="goToPage(currentPage() + 1)"
+      >
+        Suivant
+      </button>
+    </div>
+
+    <label class="app-pagination__jump">
+      <span>Aller page</span>
+      <input
+        #pageInput
+        type="number"
+        class="app-pagination__input"
+        [value]="currentPage()"
+        [min]="1"
+        [max]="totalPages()"
+        (keydown.enter)="commitPageInput(pageInput.value)"
+        (blur)="commitPageInput(pageInput.value)"
+      />
+      <span>/ {{ totalPages() }}</span>
+    </label>
+  </nav>
+}

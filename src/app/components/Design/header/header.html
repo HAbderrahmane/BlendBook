@@ -1,0 +1,24 @@
+<app-round-button class="header-btn brand-btn" [active]="isActive('/home')" (clicked)="go('/home')">
+  <app-icon name="drink" [size]="24" ariaLabel="Cocktails" />
+  <span class="brand-text">Cocktails</span>
+</app-round-button>
+
+<nav class="header-nav">
+  <app-round-button
+    class="header-btn"
+    [active]="isActive('/cocktails')"
+    (clicked)="go('/cocktails')"
+  >
+    <app-icon name="list" [size]="18" ariaLabel="Liste des cocktails" />
+  </app-round-button>
+
+  <app-square-button
+    class="header-btn cart-btn"
+    [active]="isActive('/panier')"
+    [iconOnly]="true"
+    (clicked)="go('/panier')"
+  >
+    <span class="cart-square" aria-hidden="true"></span>
+    <app-icon name="cart" [size]="20" ariaLabel="Panier" />
+  </app-square-button>
+</nav>

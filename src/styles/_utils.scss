@@ -14,14 +14,6 @@
   flex: 1 1 auto;
 }
 
-.flex-end {
-  justify-content: flex-end;
-}
-
-.Justify-content-center {
-  justify-content: center;
-}
-
 .align-items-center {
   align-items: center;
 }
@@ -54,12 +46,6 @@
   font-weight: 700;
 }
 
-.icon-img {
-  width: 24px;
-  height: 24px;
-  color: aliceblue;
-}
-
 .mb-20 {
   margin-bottom: 20px;
 }
@@ -78,10 +64,16 @@
   width: 50%;
 }
 
+@media (max-width: 1024px) {
+  .w-50 {
+    width: 100%;
+  }
+}
+
 img {
   display: block;
-  width: 50%;
-  height: 50%;
+  max-width: 100%;
+  height: auto;
 }
 .object-cover {
   object-fit: cover;

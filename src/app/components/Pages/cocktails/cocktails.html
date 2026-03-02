@@ -1,0 +1,11 @@
+<app-cocktails-list
+  class="flex-auto card w-50"
+  [preselectedId]="preselectedId()"
+  (cocktailSelected)="onCocktailSelected($event)"
+  (loadingChange)="onLoadingChange($event)"
+/>
+<app-cocktails-details
+  class="flex-auto card w-50"
+  [cocktail]="selectedCocktail()"
+  [loading]="detailsLoading()"
+/>

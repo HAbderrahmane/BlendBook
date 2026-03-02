@@ -1,0 +1,69 @@
+<div class="title-row mb-20">
+  <h2 class="flex align-items-center gap-12">
+    <app-icon name="list" [size]="25" ariaLabel="Liste des cocktails" />
+    Liste des cocktails
+  </h2>
+</div>
+
+@if (loading()) {
+  <app-loading class="mb-20" />
+} @else if (error()) {
+  <div class="mb-20">{{ error() }}</div>
+} @else {
+  <div class="list-controls mb-20">
+    <app-round-button class="swap-btn" (clicked)="toggleAlcoholic()">
+      <app-icon name="glass" [size]="16" ariaLabel="Changer la liste" />
+      {{ alcoholicOnly() ? 'Liste alcoolisee' : 'Liste sans alcool' }}
+    </app-round-button>
+    <app-search-bar
+      [value]="searchTerm()"
+      placeholder="Rechercher un cocktail..."
+      (submitted)="applySearch($event)"
+    />
+  </div>
+
+  <app-sorting
+    class="sort-row mb-20"
+    [sortBy]="sortBy()"
+    [alcoholicDir]="alcoholicSortDir()"
+    [createdAtDir]="createdAtSortDir()"
+    (alcoholicToggle)="toggleAlcoholicSort()"
+    (createdAtToggle)="toggleCreatedAtSort()"
+  />
+
+  <ul class="mb-20">
+    @for (c of cocktails(); track c.id) {
+      <li
+        class="px-12 py-6"
+        [class.active-item]="selectedId() === c.id"
+        [class.text-primary]="selectedId() === c.id"
+        (click)="select(c)"
+      >
+        <div class="item-row">
+          <div class="flex align-items-center gap-12">
+            @if (getImageUrl(c)) {
+              <img class="cocktail-thumb" [src]="getImageUrl(c)" [alt]="c.name" />
+            }
+            <h3>{{ c.name }}</h3>
+          </div>
+          @if (c.created_at) {
+            <p class="item-meta">{{ formatCreatedAt(c.created_at) }}</p>
+          }
+        </div>
+      </li>
+    }
+  </ul>
+
+  <div class="list-footer">
+    <div class="pagination-block">
+      <p class="pagination-info mb-20">
+        Page {{ currentPage() }} / {{ totalPages() }} - {{ totalCount() }} cocktails
+      </p>
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  </div>
+}

@@ -1,0 +1,77 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  gap: 12px;
+  flex-wrap: wrap;
+  background-color: var(--header-bg);
+  color: white;
+  min-height: 56px;
+  padding: 10px 16px;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.brand-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.brand-text {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.cart-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.cart-square {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: var(--header-square);
+  transform: scale(0.92);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+  z-index: 0;
+}
+
+.cart-btn app-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.cart-btn:hover .cart-square,
+.cart-btn.is-active .cart-square {
+  transform: scale(1.08);
+  background-color: var(--header-square-hover);
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 10px 12px;
+  }
+
+  .brand-btn {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+
+  .header-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

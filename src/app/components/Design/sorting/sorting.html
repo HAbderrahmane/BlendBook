@@ -1,0 +1,33 @@
+<div class="sorting-actions" aria-label="Tri par date">
+  <app-round-button
+    [iconOnly]="true"
+    [active]="sortBy() === 'alcoholic'"
+    (clicked)="alcoholicToggle.emit()"
+  >
+    <app-icon
+      [name]="
+        alcoholicDir() === 'desc'
+          ? 'arrow-down-short-wide-solid-full'
+          : 'arrow-down-wide-short-solid-full'
+      "
+      [size]="20"
+      ariaLabel="Tri alcool"
+    />
+  </app-round-button>
+
+  <app-round-button
+    [iconOnly]="true"
+    [active]="sortBy() === 'created_at'"
+    (clicked)="createdAtToggle.emit()"
+  >
+    <app-icon
+      [name]="
+        createdAtDir() === 'desc'
+          ? 'arrow-down-short-wide-solid-full'
+          : 'arrow-down-wide-short-solid-full'
+      "
+      [size]="20"
+      ariaLabel="Tri date"
+    />
+  </app-round-button>
+</div>

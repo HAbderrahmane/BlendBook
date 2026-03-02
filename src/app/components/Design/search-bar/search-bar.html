@@ -1,0 +1,11 @@
+<div class="search-wrap">
+  <input
+    type="text"
+    class="search-input"
+    [placeholder]="placeholder()"
+    [value]="query()"
+    (input)="query.set($any($event.target).value)"
+    (keydown.enter)="submit()"
+  />
+  <app-round-button class="search-btn" (clicked)="submit()">Rechercher</app-round-button>
+</div>

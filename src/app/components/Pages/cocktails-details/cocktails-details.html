@@ -1,0 +1,67 @@
+@if (loading()) {
+  <div class="details-loader">
+    <app-loading />
+  </div>
+} @else if (cocktail()) {
+  <div class="details-layout">
+    <div class="media-frame">
+      @if (getImageUrl(cocktail()!)) {
+        <img
+          [src]="getImageUrl(cocktail()!)"
+          [alt]="cocktail()!.name"
+          class="detail-image object-cover"
+        />
+      } @else {
+        <div class="media-placeholder">Image indisponible</div>
+      }
+    </div>
+
+    <div class="info-block">
+      <h2>{{ cocktail()!.name }}</h2>
+      <p class="meta-line">
+        {{ cocktail()!.alcoholic ? 'Alcoolise' : 'Sans alcool' }}
+        @if (cocktail()!.category) {
+          <span> &bull; {{ cocktail()!.category }}</span>
+        }
+        @if (cocktail()!.glass) {
+          <span> &bull; {{ cocktail()!.glass }}</span>
+        }
+      </p>
+
+      <div class="facts-grid">
+        @if (cocktail()!.instructions) {
+          <p><strong>Instructions:</strong> {{ cocktail()!.instructions }}</p>
+        }
+      </div>
+
+      @if (cocktail()!.ingredients?.length) {
+        <div class="chip-group">
+          <h3>Ingredients</h3>
+          <div class="chips">
+            @for (ing of cocktail()!.ingredients!; track $index) {
+              <span class="chip">
+                {{ ing.name }}
+                @if (ing.measure) {
+                  <small> ({{ ing.measure }})</small>
+                }
+              </span>
+            }
+          </div>
+        </div>
+      }
+
+      @if (cocktail()!.tags?.length) {
+        <div class="chip-group">
+          <h3>Tags</h3>
+          <div class="chips">
+            @for (tag of cocktail()!.tags!; track $index) {
+              <span class="chip">{{ tag }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <p class="text-gray-600">Selectionnez un cocktail dans la liste.</p>
+}
