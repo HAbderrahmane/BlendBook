@@ -1,8 +1,8 @@
 :host {
   display: block;
   background-color: var(--header-bg);
-  color: var(--surface-solid);
-  border-top: 1px solid var(--text-soft);
+  color: var(--footer-text);
+  border-top: 1px solid var(--footer-border);
 
   .footer {
     &-shell {
@@ -33,20 +33,20 @@
     &-subtitle {
       margin: 0;
       font-size: 0.7rem;
-      color: var(--text-soft);
+      color: var(--footer-subtle);
     }
 
     &-github {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: var(--surface-solid);
+      color: var(--footer-link);
       text-decoration: none;
       font-weight: 500;
       font-size: 0.78rem;
       justify-self: end;
       margin-right: 8px;
-      border: 1px solid var(--text-soft);
+      border: 1px solid var(--footer-border);
       border-radius: var(--radius-pill);
       padding: 5px 10px;
       transition: background-color 0.2s ease;
@@ -63,7 +63,7 @@
       gap: 4px;
       font-size: 0.76rem;
       font-weight: 500;
-      color: var(--text-soft-strong);
+      color: var(--footer-subtle);
     }
 
     &-copyright-icon {
