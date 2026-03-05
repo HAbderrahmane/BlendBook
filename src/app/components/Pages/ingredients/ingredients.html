@@ -63,12 +63,12 @@
             <div
               #ingredientDetailsEl
               class="ingredient-details"
+              [animate.enter]="'ingredient-details-enter'"
+              [animate.leave]="'ingredient-details-leave'"
               tabindex="0"
               (keydown.enter)="onDetailsEnter($event)"
             >
-              @if (detailsLoading()) {
-                <app-loading />
-              } @else {
+              <div [animate.enter]="'ingredient-details-enter'">
                 <div class="ingredient-scene">
                   <div class="ingredient-orbit">
                     @for (
@@ -110,7 +110,7 @@
                     <p>{{ selectedIngredient()!.description }}</p>
                   </div>
                 }
-              }
+              </div>
             </div>
           }
         </li>
