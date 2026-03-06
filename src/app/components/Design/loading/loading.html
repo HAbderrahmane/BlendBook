@@ -1,3 +1,8 @@
-<div class="loading-wrap" role="status" aria-live="polite" aria-label="Chargement">
-  <app-icon class="loading-spinner" name="spinner-solid-full" [size]="30" ariaLabel="Chargement" />
+<div class="loading-wrap" role="status" aria-live="polite" [attr.aria-label]="'loading.aria' | translate">
+  <app-icon
+    class="loading-spinner"
+    name="spinner-solid-full"
+    [size]="30"
+    [ariaLabel]="'loading.aria' | translate"
+  />
 </div>

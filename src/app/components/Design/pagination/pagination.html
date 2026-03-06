@@ -1,5 +1,5 @@
 @if (totalPages() > 1) {
-  <nav class="app-pagination" aria-label="Pagination">
+  <nav class="app-pagination" [attr.aria-label]="'pagination.aria' | translate">
     <div class="app-pagination__pages">
       <button
         type="button"
@@ -7,7 +7,7 @@
         [disabled]="currentPage() <= 1"
         (click)="goToPage(currentPage() - 1)"
       >
-        Precedent
+        {{ 'common.previous' | translate }}
       </button>
 
       @for (p of visiblePages(); track p) {
@@ -27,12 +27,12 @@
         [disabled]="currentPage() >= totalPages()"
         (click)="goToPage(currentPage() + 1)"
       >
-        Suivant
+        {{ 'common.next' | translate }}
       </button>
     </div>
 
     <label class="app-pagination__jump">
-      <span>Aller page</span>
+      <span>{{ 'common.goToPage' | translate }}</span>
       <input
         #pageInput
         type="number"

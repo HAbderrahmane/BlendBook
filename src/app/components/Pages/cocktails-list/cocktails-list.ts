@@ -18,6 +18,8 @@ import { CocktailsService, SortDir } from '../../../Services/cocktails.service';
 import { ToastService } from '../../../Services/toast.service';
 import { Cocktail } from '../../../shared/Models/cocktail.model';
 import { SortBy, Sorting } from '../../Design/sorting/sorting';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { I18nService } from '../../../Services/i18n.service';
 import {
   AddCocktailForm,
   NewCocktailFormValue,
@@ -26,13 +28,14 @@ import {
 @Component({
   selector: 'app-cocktails-list',
   standalone: true,
-  imports: [Icon, RoundButton, Pagination, Loading, Sorting, SearchBar, AddCocktailForm],
+  imports: [Icon, RoundButton, Pagination, Loading, Sorting, SearchBar, AddCocktailForm, TranslatePipe],
   templateUrl: './cocktails-list.html',
   styleUrl: './cocktails-list.scss',
 })
 export class CocktailsList {
   private readonly cocktailsService = inject(CocktailsService);
   private readonly toastService = inject(ToastService);
+  private readonly i18nService = inject(I18nService);
   private readonly mockStorageKey = 'cocktails.mock.items.v1';
   private readonly pageStorageKey = 'cocktails.page.v1';
   @ViewChild('cocktailsListEl') private cocktailsListEl?: ElementRef<HTMLUListElement>;
@@ -112,7 +115,7 @@ export class CocktailsList {
         ? this.cocktailsAutocompleteResource.error()
         : this.cocktailsResource.error()
     )
-      ? 'Impossible de charger les cocktails.'
+      ? this.i18nService.t('cocktails.list.error')
       : null,
   );
   readonly totalPages = computed(() => {
@@ -308,7 +311,7 @@ export class CocktailsList {
       this.resetSelection();
     }
 
-    this.toastService.success(`Cocktail "${cocktail.name}" supprime.`);
+    this.toastService.success(this.i18nService.t('cocktails.list.toast.deleted', { name: cocktail.name }));
   }
 
   onCocktailCreated(payload: NewCocktailFormValue): void {
@@ -337,14 +340,14 @@ export class CocktailsList {
     this.ensureListMatchesCocktail(created);
     this.closeAddCocktailModal();
     this.select(created);
-    this.toastService.success(`Cocktail "${created.name}" ajoute.`);
+    this.toastService.success(this.i18nService.t('cocktails.list.toast.added', { name: created.name }));
   }
 
   private applyCocktailEdit(id: Cocktail['id'], payload: NewCocktailFormValue): void {
     const source = this.cocktails().find((cocktail) => String(cocktail.id) === String(id));
     if (!source) {
       this.closeAddCocktailModal();
-      this.toastService.error('Cocktail introuvable pour la modification.');
+      this.toastService.error(this.i18nService.t('cocktails.list.toast.notFound'));
       return;
     }
 
@@ -369,7 +372,7 @@ export class CocktailsList {
     this.ensureListMatchesCocktail(updated);
     this.closeAddCocktailModal();
     this.select(updated);
-    this.toastService.success(`Cocktail "${updated.name}" modifie.`);
+    this.toastService.success(this.i18nService.t('cocktails.list.toast.updated', { name: updated.name }));
   }
 
   private ensureListMatchesCocktail(cocktail: Cocktail): void {
@@ -577,6 +580,6 @@ export class CocktailsList {
     if (Number.isNaN(value.getTime())) {
       return '';
     }
-    return value.toLocaleDateString();
+    return value.toLocaleDateString(this.i18nService.language());
   }
 }

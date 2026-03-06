@@ -4,10 +4,11 @@ import { Cocktail } from '../../../shared/Models/cocktail.model';
 import { RoundButton } from '../../Design/buttons/round-button/round-button';
 import { Icon } from '../../Design/icon/icon';
 import { LikedCocktailsService } from '../../../Services/liked-cocktails.service';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-cocktails-details',
-  imports: [Loading, RoundButton, Icon],
+  imports: [Loading, RoundButton, Icon, TranslatePipe],
   templateUrl: './cocktails-details.html',
   styleUrl: './cocktails-details.scss',
 })

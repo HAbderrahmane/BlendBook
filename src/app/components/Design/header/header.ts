@@ -1,26 +1,34 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { I18nService } from '../../../Services/i18n.service';
 import { Icon } from '../icon/icon';
 import { RoundButton } from '../buttons/round-button/round-button';
 import { Cart } from '../cart/cart';
 import { LikedCocktailsService } from '../../../Services/liked-cocktails.service';
 import { Cocktail } from '../../../shared/Models/cocktail.model';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { AppLanguage } from '../../../i18n/types';
 
 @Component({
   selector: 'app-header',
-  imports: [Icon, RoundButton, Cart],
+  imports: [Icon, RoundButton, Cart, TranslatePipe, MatMenuModule, MatButtonModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
   private readonly router = inject(Router);
   private readonly likedCocktailsService = inject(LikedCocktailsService);
+  private readonly i18nService = inject(I18nService);
 
   readonly theme = input<'base' | 'moon' | 'night-meteor'>('base');
   readonly themeChange = output<'base' | 'moon' | 'night-meteor'>();
   readonly showCartDialog = signal(false);
   readonly likedCocktails = computed(() => this.likedCocktailsService.likedCocktails());
   readonly likedCount = computed(() => this.likedCocktailsService.likedCount());
+  readonly currentLanguage = computed(() => this.i18nService.language());
+  readonly languages = this.i18nService.languages();
 
   go(path: string): void {
     this.router.navigateByUrl(path);
@@ -47,6 +55,10 @@ export class Header {
     this.likedCocktailsService.remove(id);
   }
 
+  setLanguage(language: AppLanguage): void {
+    this.i18nService.setLanguage(language);
+  }
+
   toggleTheme(): void {
     this.themeChange.emit(this.nextTheme());
   }
@@ -65,10 +77,10 @@ export class Header {
     return 'theme-sun';
   }
 
-  nextThemeLabel(): string {
+  nextThemeLabelKey(): string {
     const next = this.nextTheme();
-    if (next === 'moon') return 'Switch to Moon theme';
-    if (next === 'night-meteor') return 'Switch to NightMeteor theme';
-    return 'Switch to Base theme';
+    if (next === 'moon') return 'header.theme.toMoon';
+    if (next === 'night-meteor') return 'header.theme.toNightMeteor';
+    return 'header.theme.toBase';
   }
 }

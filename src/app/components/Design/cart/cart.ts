@@ -2,11 +2,12 @@ import { Component, input, output } from '@angular/core';
 import { Cocktail } from '../../../shared/Models/cocktail.model';
 import { Icon } from '../icon/icon';
 import { RoundButton } from '../buttons/round-button/round-button';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [Icon, RoundButton],
+  imports: [Icon, RoundButton, TranslatePipe],
   templateUrl: './cart.html',
   styleUrl: './cart.scss',
 })

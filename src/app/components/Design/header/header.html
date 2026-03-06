@@ -1,19 +1,29 @@
 <app-round-button class="header-btn brand-btn" [active]="isActive('/home')" (clicked)="go('/home')">
-  <app-icon name="drink" [size]="24" ariaLabel="Cocktails" />
-  <span class="brand-text">Blendbook</span>
+  <app-icon name="drink" [size]="24" [ariaLabel]="'header.nav.cocktails' | translate" />
+  <span class="brand-text">{{ 'header.brand' | translate }}</span>
 </app-round-button>
 
 <app-round-button class="header-btn theme-btn" [iconOnly]="true" (clicked)="toggleTheme()">
-  <app-icon [name]="nextThemeIcon()" [size]="22" [ariaLabel]="nextThemeLabel()" />
+  <app-icon [name]="nextThemeIcon()" [size]="22" [ariaLabel]="nextThemeLabelKey() | translate" />
 </app-round-button>
 
 <nav class="header-nav">
+  <button
+    class="header-btn lang-btn"
+    type="button"
+    mat-button
+    [matMenuTriggerFor]="languageMenu"
+    [attr.aria-label]="'header.language.menu' | translate"
+  >
+    {{ ('header.language.' + currentLanguage()) | translate }}
+  </button>
+
   <app-round-button
     class="header-btn"
     [active]="isActive('/cocktails')"
     (clicked)="go('/cocktails')"
   >
-    <app-icon name="list" [size]="25" ariaLabel="Liste des cocktails" />
+    <app-icon name="list" [size]="25" [ariaLabel]="'header.nav.cocktails' | translate" />
   </app-round-button>
 
   <app-round-button
@@ -21,7 +31,7 @@
     [active]="isActive('/ingredients')"
     (clicked)="go('/ingredients')"
   >
-    <app-icon name="hungerbox-cafe" [size]="25" ariaLabel="Liste des ingredients" />
+    <app-icon name="hungerbox-cafe" [size]="25" [ariaLabel]="'header.nav.ingredients' | translate" />
   </app-round-button>
 
   <app-round-button
@@ -30,20 +40,28 @@
     [iconOnly]="true"
     (clicked)="toggleCartDialog()"
   >
-    <app-icon name="cart" [size]="25" ariaLabel="Panier" />
+    <app-icon name="cart" [size]="25" [ariaLabel]="'header.nav.cart' | translate" />
     @if (likedCount() > 0) {
       <span class="cart-badge">{{ likedCount() }}</span>
     }
   </app-round-button>
 </nav>
 
+<mat-menu #languageMenu="matMenu" panelClass="lang-menu-panel">
+  @for (lang of languages; track lang) {
+    <button mat-menu-item type="button" (click)="setLanguage(lang)">
+      {{ ('header.language.' + lang) | translate }}
+    </button>
+  }
+</mat-menu>
+
 @if (showCartDialog()) {
   <div class="cart-dialog-backdrop" (click)="closeCartDialog()">
     <div class="cart-dialog card" (click)="$event.stopPropagation()">
       <div class="cart-dialog__head">
-        <h3>Cart</h3>
+        <h3>{{ 'header.cart.title' | translate }}</h3>
         <app-round-button [iconOnly]="true" (clicked)="closeCartDialog()">
-          <app-icon name="xmark-solid-full" [size]="25" ariaLabel="Fermer" />
+          <app-icon name="xmark-solid-full" [size]="25" [ariaLabel]="'common.close' | translate" />
         </app-round-button>
       </div>
       <app-cart

@@ -1,8 +1,10 @@
 import { Component, computed, input, output } from '@angular/core';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './pagination.html',
   styleUrl: './pagination.scss',
 })

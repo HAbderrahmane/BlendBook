@@ -1,15 +1,16 @@
 import { Component, effect, input, output, signal } from '@angular/core';
 import { Icon } from '../icon/icon';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-search-bar',
-  imports: [Icon],
+  imports: [Icon, TranslatePipe],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.scss',
 })
 export class SearchBar {
   readonly value = input('');
-  readonly placeholder = input('Rechercher...');
+  readonly placeholder = input('search.defaultPlaceholder');
   readonly submitted = output<string>();
 
   readonly query = signal('');

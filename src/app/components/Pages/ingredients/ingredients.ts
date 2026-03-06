@@ -8,17 +8,20 @@ import { Pagination } from '../../Design/pagination/pagination';
 import { Ingredient } from '../../../shared/Models/ingredient.model';
 import { SearchBar } from '../../Design/search-bar/search-bar';
 import { RoundButton } from '../../Design/buttons/round-button/round-button';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { I18nService } from '../../../Services/i18n.service';
 
 @Component({
   selector: 'app-ingredients',
   standalone: true,
-  imports: [Icon, Loading, Pagination, SearchBar, RoundButton],
+  imports: [Icon, Loading, Pagination, SearchBar, RoundButton, TranslatePipe],
   templateUrl: './ingredients.html',
   styleUrl: './ingredients.scss',
 })
 export class Ingredients {
   private readonly ingredientsService = inject(IngredientsService);
   private readonly route = inject(ActivatedRoute);
+  private readonly i18nService = inject(I18nService);
   private readonly pageStorageKey = 'ingredients.page.v1';
   @ViewChild('ingredientsListEl') private ingredientsListEl?: ElementRef<HTMLUListElement>;
   @ViewChild('ingredientDetailsEl') private ingredientDetailsEl?: ElementRef<HTMLDivElement>;
@@ -75,7 +78,7 @@ export class Ingredients {
         ? this.ingredientsAutocompleteResource.error()
         : this.ingredientsResource.error()
     )
-      ? 'Impossible de charger les ingredients.'
+      ? this.i18nService.t('ingredients.error')
       : null,
   );
   readonly totalPages = computed(() => {
@@ -284,15 +287,38 @@ export class Ingredients {
   detailPoints(ingredient: Ingredient | null): Array<{ label: string; value: string }> {
     if (!ingredient) return [];
     return [
-      { label: 'Name', value: ingredient.name || '-' },
-      { label: 'Type', value: ingredient.type || '-' },
       {
-        label: 'Alcohol',
-        value: ingredient.containsAlcohol == null ? '-' : ingredient.containsAlcohol ? 'Yes' : 'No',
+        label: this.i18nService.t('ingredients.details.name'),
+        value: ingredient.name || this.i18nService.t('common.none'),
       },
-      { label: 'ABV', value: ingredient.abv == null ? 'N/A' : `${ingredient.abv}%` },
-      { label: 'Created', value: ingredient.createdAt || '-' },
-      { label: 'Updated', value: ingredient.updatedAt || '-' },
+      {
+        label: this.i18nService.t('ingredients.details.type'),
+        value: ingredient.type || this.i18nService.t('common.none'),
+      },
+      {
+        label: this.i18nService.t('ingredients.details.alcohol'),
+        value:
+          ingredient.containsAlcohol == null
+            ? this.i18nService.t('common.none')
+            : ingredient.containsAlcohol
+              ? this.i18nService.t('common.yes')
+              : this.i18nService.t('common.no'),
+      },
+      {
+        label: this.i18nService.t('ingredients.details.abv'),
+        value:
+          ingredient.abv == null
+            ? this.i18nService.t('common.na')
+            : `${ingredient.abv}${this.i18nService.t('ingredients.abvUnit')}`,
+      },
+      {
+        label: this.i18nService.t('ingredients.details.created'),
+        value: ingredient.createdAt || this.i18nService.t('common.none'),
+      },
+      {
+        label: this.i18nService.t('ingredients.details.updated'),
+        value: ingredient.updatedAt || this.i18nService.t('common.none'),
+      },
     ];
   }
 }

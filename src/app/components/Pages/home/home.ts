@@ -7,11 +7,13 @@ import { CocktailsService } from '../../../Services/cocktails.service';
 import { Cocktail } from '../../../shared/Models/cocktail.model';
 import { IngredientsService } from '../../../Services/ingredients.service';
 import { Ingredient } from '../../../shared/Models/ingredient.model';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { I18nService } from '../../../Services/i18n.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RoundButton, Icon, Loading],
+  imports: [RoundButton, Icon, Loading, TranslatePipe],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -19,6 +21,7 @@ export class Home {
   private readonly cocktailsService = inject(CocktailsService);
   private readonly ingredientsService = inject(IngredientsService);
   private readonly router = inject(Router);
+  private readonly i18nService = inject(I18nService);
   readonly alcoholicCocktailsResource = this.cocktailsService.createCocktailsResource(
     () =>
       ({
@@ -81,7 +84,7 @@ export class Home {
   );
   readonly error = computed(() =>
     this.alcoholicCocktailsResource.error() || this.nonAlcoholicCocktailsResource.error()
-      ? 'Impossible de charger les cocktails.'
+      ? this.i18nService.t('home.error.loadCocktails')
       : null,
   );
 

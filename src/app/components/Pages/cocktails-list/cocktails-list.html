@@ -1,7 +1,7 @@
 <div class="title-row mb-20">
   <app-round-button class="title-btn" (clicked)="resetPagination()">
-    <app-icon name="list" [size]="25" ariaLabel="Liste des cocktails" />
-    Liste des cocktails
+    <app-icon name="list" [size]="25" [ariaLabel]="'cocktails.list.title' | translate" />
+    {{ 'cocktails.list.title' | translate }}
   </app-round-button>
 </div>
 
@@ -10,13 +10,21 @@
     <app-icon
       [name]="alcoholicOnly() ? 'wine' : 'wine-off'"
       [size]="16"
-      [ariaLabel]="alcoholicOnly() ? 'Liste alcoolisee' : 'Liste sans alcool'"
+      [ariaLabel]="
+        alcoholicOnly()
+          ? ('cocktails.list.filterAlcoholic' | translate)
+          : ('cocktails.list.filterNonAlcoholic' | translate)
+      "
     />
-    {{ alcoholicOnly() ? 'Liste alcoolisee' : 'Liste sans alcool' }}
+    {{
+      alcoholicOnly()
+        ? ('cocktails.list.filterAlcoholic' | translate)
+        : ('cocktails.list.filterNonAlcoholic' | translate)
+    }}
   </app-round-button>
   <app-search-bar
     [value]="searchTerm()"
-    placeholder="Rechercher un cocktail..."
+    placeholder="cocktails.list.searchPlaceholder"
     (submitted)="applySearch($event)"
   />
 </div>
@@ -40,7 +48,7 @@
     class="cocktails-list-items"
     tabindex="0"
     role="listbox"
-    aria-label="Liste des cocktails"
+    [attr.aria-label]="'cocktails.list.aria.list' | translate"
     (keydown)="onListKeydown($event)"
   >
     @for (c of cocktails(); track c.id) {
@@ -68,14 +76,18 @@
               [iconOnly]="true"
               (click)="openEditCocktailModal(c); $event.stopPropagation()"
             >
-              <app-icon name="edit" [size]="20" ariaLabel="Editer cocktail" />
+              <app-icon name="edit" [size]="20" [ariaLabel]="'cocktails.list.aria.edit' | translate" />
             </app-round-button>
             <app-round-button
               class="delete-btn"
               [iconOnly]="true"
               (click)="deleteCocktail(c); $event.stopPropagation()"
             >
-              <app-icon name="trash-can-solid-full" [size]="16" ariaLabel="Supprimer cocktail" />
+              <app-icon
+                name="trash-can-solid-full"
+                [size]="16"
+                [ariaLabel]="'cocktails.list.aria.delete' | translate"
+              />
             </app-round-button>
           </div>
         </div>
@@ -85,15 +97,18 @@
 
   <div class="list-actions">
     <app-round-button class="add-btn" (clicked)="openAddCocktailModal()">
-      <app-icon name="circle-plus-solid-full" [size]="25" ariaLabel="Ajouter cocktail" />
-      Add cocktail
+      <app-icon name="circle-plus-solid-full" [size]="25" [ariaLabel]="'cocktails.list.add' | translate" />
+      {{ 'cocktails.list.add' | translate }}
     </app-round-button>
   </div>
 
   <div class="list-footer">
     <div class="pagination-block">
       <p class="pagination-info">
-        Page {{ currentPage() }} / {{ totalPages() }} - {{ totalCount() }} cocktails
+        {{
+          'cocktails.list.paginationInfo'
+            | translate: { page: currentPage(), pages: totalPages(), count: totalCount() }
+        }}
       </p>
       <app-pagination
         class="compact-pagination"
@@ -109,14 +124,14 @@
   <div class="add-cocktail-modal-backdrop" (click)="closeAddCocktailModal()">
     <div class="add-cocktail-modal card" (click)="$event.stopPropagation()">
       <div class="add-cocktail-modal__header">
-        <h3>{{ isEditMode() ? 'Editer le cocktail' : 'Nouveau cocktail' }}</h3>
+        <h3>{{ isEditMode() ? ('cocktails.list.modal.edit' | translate) : ('cocktails.list.modal.new' | translate) }}</h3>
         <app-round-button [iconOnly]="true" (clicked)="closeAddCocktailModal()">
-          <app-icon name="xmark-solid-full" [size]="25" ariaLabel="Fermer" />
+          <app-icon name="xmark-solid-full" [size]="25" [ariaLabel]="'common.close' | translate" />
         </app-round-button>
       </div>
       <app-add-cocktail-form
         [initialValue]="formSeed()"
-        [submitLabel]="'Enregistrer'"
+        [submitLabel]="'forms.cocktail.submit'"
         (submitCocktail)="onCocktailCreated($event)"
       />
     </div>

@@ -1,4 +1,4 @@
-<div class="sorting-actions" aria-label="Tri par date">
+<div class="sorting-actions" [attr.aria-label]="'sorting.aria' | translate">
   <app-round-button
     [iconOnly]="true"
     [active]="sortBy() === 'alcoholic'"
@@ -11,7 +11,7 @@
           : 'arrow-down-wide-short-solid-full'
       "
       [size]="25"
-      ariaLabel="Tri alcool"
+      [ariaLabel]="'sorting.alcohol' | translate"
     />
   </app-round-button>
 
@@ -20,10 +20,10 @@
     [active]="sortBy() === 'created_at'"
     (clicked)="createdAtToggle.emit()"
   >
-    <app-icon
-      [name]="createdAtDir() === 'desc' ? 'datefns-down' : 'datefns'"
-      [size]="25"
-      ariaLabel="Tri date"
-    />
+      <app-icon
+        [name]="createdAtDir() === 'desc' ? 'datefns-down' : 'datefns'"
+        [size]="25"
+        [ariaLabel]="'sorting.date' | translate"
+      />
   </app-round-button>
 </div>

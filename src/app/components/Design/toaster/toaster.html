@@ -11,10 +11,10 @@
       <button
         class="toast__close"
         type="button"
-        aria-label="Fermer la notification"
+        [attr.aria-label]="'toaster.close' | translate"
         (click)="toastService.dismiss(toast.id)"
       >
-        ×
+        �
       </button>
     </div>
   }

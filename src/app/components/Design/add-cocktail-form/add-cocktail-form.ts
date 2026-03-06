@@ -1,8 +1,9 @@
-import { Component, computed, effect, input, output } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RoundButton } from '../buttons/round-button/round-button';
 import { AppInput } from '../input/input';
 import { Icon } from '../icon/icon';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 export interface NewCocktailFormValue {
   name: string;
@@ -19,14 +20,13 @@ export interface NewCocktailFormValue {
 @Component({
   selector: 'app-add-cocktail-form',
   standalone: true,
-  imports: [AppInput, RoundButton, Icon, ReactiveFormsModule],
+  imports: [AppInput, RoundButton, Icon, ReactiveFormsModule, TranslatePipe],
   templateUrl: './add-cocktail-form.html',
   styleUrl: './add-cocktail-form.scss',
 })
 export class AddCocktailForm {
   readonly initialValue = input<NewCocktailFormValue | null>(null);
-  readonly submitLabel = input('Ajouter le cocktail');
-  readonly isSaveAction = computed(() => this.submitLabel().trim().toLowerCase() === 'enregistrer');
+  readonly submitLabel = input('forms.cocktail.submit');
 
   readonly form = new FormGroup({
     name: new FormControl('', {

@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { RoundButton } from '../buttons/round-button/round-button';
 import { Icon } from '../icon/icon';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 export type SortBy = 'alcoholic' | 'created_at';
 export type SortDir = 'asc' | 'desc';
@@ -8,7 +9,7 @@ export type SortDir = 'asc' | 'desc';
 @Component({
   selector: 'app-sorting',
   standalone: true,
-  imports: [RoundButton, Icon],
+  imports: [RoundButton, Icon, TranslatePipe],
   templateUrl: './sorting.html',
   styleUrl: './sorting.scss',
 })

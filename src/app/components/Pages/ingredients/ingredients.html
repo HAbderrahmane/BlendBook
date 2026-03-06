@@ -1,15 +1,15 @@
 <section class="ingredients-page card">
   <div class="ingredients-title">
     <app-round-button class="title-btn" (clicked)="resetPagination()">
-      <app-icon name="hungerbox-cafe" [size]="24" ariaLabel="Ingredients" />
-      Ingredients
+      <app-icon name="hungerbox-cafe" [size]="24" [ariaLabel]="'ingredients.title' | translate" />
+      {{ 'ingredients.title' | translate }}
     </app-round-button>
   </div>
 
   <div class="ingredients-controls">
     <app-search-bar
       [value]="searchTerm()"
-      placeholder="Rechercher un ingredient..."
+      placeholder="ingredients.searchPlaceholder"
       (submitted)="applySearch($event)"
     />
   </div>
@@ -47,13 +47,15 @@
             </div>
             <div class="ingredients-item__end">
               @if (ingredient.abv != null) {
-                <span class="ingredients-item__abv">{{ ingredient.abv }}% ABV</span>
+                <span class="ingredients-item__abv"
+                  >{{ ingredient.abv }}{{ 'ingredients.abvUnit' | translate }}</span
+                >
               }
               <span class="ingredients-item__chevron">
                 <app-icon
                   [name]="isExpanded(ingredient.id) ? 'chevrons-up' : 'chevrons-down'"
                   [size]="25"
-                  ariaLabel="Toggle details"
+                  [ariaLabel]="'ingredients.aria.toggleDetails' | translate"
                 />
               </span>
             </div>
@@ -106,7 +108,7 @@
 
                 @if (selectedIngredient()?.description) {
                   <div class="ingredient-description">
-                    <strong>Description</strong>
+                    <strong>{{ 'ingredients.details.description' | translate }}</strong>
                     <p>{{ selectedIngredient()!.description }}</p>
                   </div>
                 }
@@ -119,7 +121,10 @@
 
     <div class="ingredients-footer">
       <p class="ingredients-info">
-        Page {{ currentPage() }} / {{ totalPages() }} - {{ totalCount() }} ingredients
+        {{
+          'ingredients.paginationInfo'
+            | translate: { page: currentPage(), pages: totalPages(), count: totalCount() }
+        }}
       </p>
       <app-pagination
         [currentPage]="currentPage()"

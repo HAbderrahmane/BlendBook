@@ -1,10 +1,10 @@
 <footer class="footer-shell">
   <div class="footer-left">
-    <p class="footer-title">Cocktail Atelier</p>
-    <p class="footer-subtitle">Build bold drinks. Keep it balanced.</p>
+    <p class="footer-title">{{ 'footer.title' | translate }}</p>
+    <p class="footer-subtitle">{{ 'footer.subtitle' | translate }}</p>
   </div>
 
-  <p class="footer-center" aria-label="Copyright">
+  <p class="footer-center" [attr.aria-label]="'footer.copyright' | translate">
     <span class="footer-copyright-icon">&copy;</span>
     2025-2026
   </p>
@@ -14,10 +14,10 @@
     href="https://github.com/HAbderrahmane"
     target="_blank"
     rel="noopener noreferrer"
-    aria-label="GitHub HAbderrahmane"
-    title="GitHub HAbderrahmane"
+    [attr.aria-label]="'footer.github' | translate"
+    [title]="'footer.github' | translate"
   >
     <span class="footer-handle">HAbderrahmane</span>
-    <app-icon name="github" [size]="25" ariaLabel="GitHub" />
+    <app-icon name="github" [size]="25" [ariaLabel]="'footer.github' | translate" />
   </a>
 </footer>

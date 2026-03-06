@@ -1,6 +1,6 @@
 <section class="cart">
   @if (cocktails().length === 0) {
-    <p class="cart-empty">Aucun cocktail like.</p>
+    <p class="cart-empty">{{ 'cart.empty' | translate }}</p>
   } @else {
     <ul class="cart-list">
       @for (cocktail of cocktails(); track cocktail.id) {
@@ -21,7 +21,7 @@
             (click)="$event.stopPropagation()"
             (clicked)="onUnlike(cocktail)"
           >
-            <app-icon name="heart-solid-full" [size]="25" ariaLabel="Retirer des likes" />
+            <app-icon name="heart-solid-full" [size]="25" [ariaLabel]="'cart.unlike' | translate" />
           </app-round-button>
         </li>
       }

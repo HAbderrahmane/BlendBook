@@ -1,0 +1,17 @@
+import { Pipe, PipeTransform, inject } from '@angular/core';
+import { I18nService } from '../Services/i18n.service';
+import { TranslationParams } from '../i18n/types';
+
+@Pipe({
+  name: 'translate',
+  standalone: true,
+  pure: false,
+})
+export class TranslatePipe implements PipeTransform {
+  private readonly i18n = inject(I18nService);
+
+  transform(key: string | null | undefined, params?: TranslationParams): string {
+    if (!key) return '';
+    return this.i18n.t(key, params);
+  }
+}

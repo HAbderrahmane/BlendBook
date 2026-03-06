@@ -1,43 +1,43 @@
 <form class="add-cocktail-form" [formGroup]="form" (submit)="$event.preventDefault(); submit()">
-  <h3 class="add-cocktail-form__title">Ajouter un cocktail</h3>
+  <h3 class="add-cocktail-form__title">{{ 'forms.cocktail.title' | translate }}</h3>
 
   <div class="add-cocktail-form__grid">
     <app-input
-      label="Nom"
-      placeholder="Ex: Negroni"
+      [label]="'forms.cocktail.name.label' | translate"
+      [placeholder]="'forms.cocktail.name.placeholder' | translate"
       [required]="true"
       formControlName="name"
     />
 
     <app-input
-      label="Image URL"
-      placeholder="https://..."
+      [label]="'forms.cocktail.image.label' | translate"
+      [placeholder]="'forms.cocktail.image.placeholder' | translate"
       type="url"
       [required]="true"
       formControlName="imageUrl"
     />
 
     <app-input
-      label="Categorie"
-      placeholder="Ex: Contemporary Classics"
+      [label]="'forms.cocktail.category.label' | translate"
+      [placeholder]="'forms.cocktail.category.placeholder' | translate"
       formControlName="category"
     />
 
     <app-input
-      label="Verre"
-      placeholder="Ex: Old Fashioned Glass"
+      [label]="'forms.cocktail.glass.label' | translate"
+      [placeholder]="'forms.cocktail.glass.placeholder' | translate"
       formControlName="glass"
     />
 
     <label class="add-cocktail-form__toggle">
       <input type="checkbox" formControlName="alcoholic" />
-      <span>Alcoolise</span>
+      <span>{{ 'forms.cocktail.alcoholic' | translate }}</span>
     </label>
   </div>
 
   <app-input
-    label="Instructions"
-    placeholder="Ex: Stir ingredients with ice, strain into chilled glass..."
+    [label]="'forms.cocktail.instructions.label' | translate"
+    [placeholder]="'forms.cocktail.instructions.placeholder' | translate"
     [required]="true"
     [multiline]="true"
     [rows]="4"
@@ -45,32 +45,30 @@
   />
 
   <app-input
-    label="Description"
-    placeholder="Une courte description du cocktail"
+    [label]="'forms.cocktail.description.label' | translate"
+    [placeholder]="'forms.cocktail.description.placeholder' | translate"
     [multiline]="true"
     [rows]="3"
     formControlName="description"
   />
 
   <app-input
-    label="Ingredients"
-    placeholder="Gin, Campari, Sweet Vermouth"
+    [label]="'forms.cocktail.ingredients.label' | translate"
+    [placeholder]="'forms.cocktail.ingredients.placeholder' | translate"
     [required]="true"
     formControlName="ingredientsText"
   />
 
   <app-input
-    label="Tags"
-    placeholder="Bitter, Aperitif, Classic"
+    [label]="'forms.cocktail.tags.label' | translate"
+    [placeholder]="'forms.cocktail.tags.placeholder' | translate"
     formControlName="tagsText"
   />
 
   <div class="add-cocktail-form__actions">
     <app-round-button class="add-btn" [class.is-disabled]="!isValid" (clicked)="submit()">
-      @if (isSaveAction()) {
-        <app-icon name="save" [size]="20" ariaLabel="Enregistrer" />
-      }
-      {{ submitLabel() }}
+      <app-icon name="save" [size]="20" [ariaLabel]="'common.save' | translate" />
+      {{ submitLabel() | translate }}
     </app-round-button>
   </div>
 </form>

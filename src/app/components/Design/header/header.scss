@@ -17,6 +17,14 @@
     margin-left: auto;
   }
 
+  .lang-btn {
+    min-width: 56px;
+    font-weight: 700;
+    color: var(--surface-solid);
+    background: color-mix(in srgb, var(--surface-solid) 15%, transparent);
+    border-radius: var(--radius-pill);
+  }
+
   .theme-btn {
     position: absolute;
     left: 16px;

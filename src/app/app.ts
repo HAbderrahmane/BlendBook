@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './components/Design/footer/footer';
 import { Header } from './components/Design/header/header';
 import { Toaster } from './components/Design/toaster/toaster';
 import { CocktailsService } from './Services/cocktails.service';
+import { I18nService } from './Services/i18n.service';
 import { IngredientsService } from './Services/ingredients.service';
 import { LikedCocktailsService } from './Services/liked-cocktails.service';
 
@@ -18,9 +19,11 @@ type AppTheme = 'base' | 'moon' | 'night-meteor';
 })
 export class App {
   private readonly themeStorageKey = 'app.theme.v1';
+  private readonly i18nService = inject(I18nService);
   readonly theme = signal<AppTheme>(this.readInitialTheme());
 
   constructor() {
+    this.i18nService.language();
     this.applyTheme(this.theme());
   }
 
