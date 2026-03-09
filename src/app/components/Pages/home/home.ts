@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoundButton } from '../../Design/buttons/round-button/round-button';
@@ -18,30 +19,25 @@ import { I18nService } from '../../../Services/i18n.service';
   styleUrl: './home.scss',
 })
 export class Home {
+  private readonly document = inject(DOCUMENT);
   private readonly cocktailsService = inject(CocktailsService);
   private readonly ingredientsService = inject(IngredientsService);
   private readonly router = inject(Router);
   private readonly i18nService = inject(I18nService);
-  readonly alcoholicCocktailsResource = this.cocktailsService.createCocktailsResource(
-    () =>
-      ({
-        page: 1,
-        perPage: 2,
-        sortBy: 'created_at',
-        sortDir: 'desc',
-        alcoholic: true,
-      }),
-  );
-  readonly nonAlcoholicCocktailsResource = this.cocktailsService.createCocktailsResource(
-    () =>
-      ({
-        page: 1,
-        perPage: 2,
-        sortBy: 'created_at',
-        sortDir: 'desc',
-        alcoholic: false,
-      }),
-  );
+  readonly alcoholicCocktailsResource = this.cocktailsService.createCocktailsResource(() => ({
+    page: 1,
+    perPage: 2,
+    sortBy: 'created_at',
+    sortDir: 'desc',
+    alcoholic: true,
+  }));
+  readonly nonAlcoholicCocktailsResource = this.cocktailsService.createCocktailsResource(() => ({
+    page: 1,
+    perPage: 2,
+    sortBy: 'created_at',
+    sortDir: 'desc',
+    alcoholic: false,
+  }));
 
   readonly cocktails = computed(() => [
     ...(this.alcoholicCocktailsResource.value().data ?? []),
@@ -80,7 +76,8 @@ export class Home {
   );
   readonly featuredIngredients = computed(() => this.pickRandom(this.ingredients(), 4));
   readonly loading = computed(
-    () => this.alcoholicCocktailsResource.isLoading() || this.nonAlcoholicCocktailsResource.isLoading(),
+    () =>
+      this.alcoholicCocktailsResource.isLoading() || this.nonAlcoholicCocktailsResource.isLoading(),
   );
   readonly error = computed(() =>
     this.alcoholicCocktailsResource.error() || this.nonAlcoholicCocktailsResource.error()
@@ -94,6 +91,7 @@ export class Home {
   readonly featuredCocktails = computed(() => {
     return this.cocktails();
   });
+  readonly coverImageUrl = this.assetUrl('cover.svg');
 
   goToCocktails(): void {
     this.router.navigateByUrl('/cocktails');
@@ -150,5 +148,9 @@ export class Home {
 
   getIngredientImage(ingredient?: Ingredient): string | undefined {
     return ingredient?.imageUrl;
+  }
+
+  private assetUrl(path: string): string {
+    return new URL(path, this.document.baseURI).toString();
   }
 }

@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewEncapsulation, effect, inject, input, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -11,6 +12,7 @@ import { catchError, of } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
 })
 export class Icon {
+  private readonly document = inject(DOCUMENT);
   private readonly http = inject(HttpClient);
   private readonly sanitizer = inject(DomSanitizer);
 
@@ -32,8 +34,8 @@ export class Icon {
 
   private loadIcon(iconName: string): void {
     const fileName = iconName.endsWith('.svg') ? iconName : `${iconName}.svg`;
-    const directPath = `/${fileName}`;
-    const publicPath = `/public/${fileName}`;
+    const directPath = this.assetUrl(fileName);
+    const publicPath = this.assetUrl(`public/${fileName}`);
 
     this.http
       .get(directPath, { responseType: 'text' })
@@ -48,5 +50,9 @@ export class Icon {
         }
         this.svgContentSafe.set(this.sanitizer.bypassSecurityTrustHtml(svg));
       });
+  }
+
+  private assetUrl(path: string): string {
+    return new URL(path, this.document.baseURI).toString();
   }
 }
