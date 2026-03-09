@@ -1,0 +1,94 @@
+<section class="auth-shell">
+  <article class="auth-card card">
+    <div class="auth-card__head">
+      <p class="auth-card__eyebrow">{{ 'auth.register.eyebrow' | translate }}</p>
+      <h1>{{ 'auth.register.title' | translate }}</h1>
+      <p>{{ 'auth.register.description' | translate }}</p>
+    </div>
+
+    <form class="auth-form" [formGroup]="registerForm" (ngSubmit)="submit()" novalidate>
+      <div class="auth-grid">
+        <div class="auth-form__field">
+          <app-input
+            formControlName="displayName"
+            [label]="'auth.fields.displayName.label' | translate"
+            [placeholder]="'auth.fields.displayName.placeholder' | translate"
+            [required]="true"
+            autocomplete="name"
+          />
+          @if (errorMessage('displayName'); as error) {
+            <p class="auth-form__error">{{ error }}</p>
+          }
+        </div>
+
+        <div class="auth-form__field auth-grid__full">
+          <app-input
+            formControlName="email"
+            [label]="'auth.fields.email.label' | translate"
+            [placeholder]="'auth.fields.email.placeholder' | translate"
+            [required]="true"
+            type="email"
+            autocomplete="email"
+          />
+          @if (errorMessage('email'); as error) {
+            <p class="auth-form__error">{{ error }}</p>
+          }
+        </div>
+
+        <div class="auth-form__field">
+          <app-input
+            formControlName="password"
+            [label]="'auth.fields.password.label' | translate"
+            [placeholder]="'auth.fields.password.placeholder' | translate"
+            [required]="true"
+            type="password"
+            autocomplete="new-password"
+          />
+          @if (errorMessage('password'); as error) {
+            <p class="auth-form__error">{{ error }}</p>
+          }
+        </div>
+
+        <div class="auth-form__field">
+          <app-input
+            formControlName="confirmPassword"
+            [label]="'auth.fields.confirmPassword.label' | translate"
+            [placeholder]="'auth.fields.confirmPassword.placeholder' | translate"
+            [required]="true"
+            type="password"
+            autocomplete="new-password"
+          />
+          @if (errorMessage('confirmPassword'); as error) {
+            <p class="auth-form__error">{{ error }}</p>
+          }
+        </div>
+      </div>
+
+      <p class="auth-form__caption">{{ 'auth.register.passwordHint' | translate }}</p>
+
+      <div class="auth-form__actions">
+        <button class="auth-submit" type="submit" [disabled]="submitting()">
+          {{ (submitting() ? 'auth.common.submitting' : 'auth.register.submit') | translate }}
+        </button>
+        <a class="auth-link-pill" routerLink="/login">
+          <app-icon name="circle-user-solid-full" [size]="18" [ariaLabel]="'header.nav.login' | translate" />
+          {{ 'auth.register.switchCta' | translate }}
+        </a>
+      </div>
+    </form>
+  </article>
+
+  <article class="auth-side">
+    <div class="auth-side__panel">
+      <p class="auth-side__eyebrow">{{ 'auth.common.kicker' | translate }}</p>
+      <h2>{{ 'auth.register.sideTitle' | translate }}</h2>
+      <p>{{ 'auth.register.sideDescription' | translate }}</p>
+
+      <div class="auth-side__chips">
+        <span>{{ 'auth.common.benefit.fast' | translate }}</span>
+        <span>{{ 'auth.common.benefit.jwt' | translate }}</span>
+        <span>{{ 'auth.common.benefit.demo' | translate }}</span>
+      </div>
+    </div>
+  </article>
+</section>

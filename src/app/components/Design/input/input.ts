@@ -17,11 +17,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class AppInput implements ControlValueAccessor {
   readonly label = input('');
   readonly placeholder = input('');
-  readonly type = input<'text' | 'url' | 'number'>('text');
+  readonly type = input<'text' | 'url' | 'number' | 'email' | 'password'>('text');
   readonly value = input<string | undefined>(undefined);
   readonly required = input(false);
   readonly multiline = input(false);
   readonly rows = input(3);
+  readonly autocomplete = input('');
   readonly disabled = signal(false);
   readonly innerValue = signal('');
 

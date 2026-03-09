@@ -15,20 +15,26 @@
     align-items: center;
     gap: 10px;
     margin-left: auto;
+    flex-wrap: wrap;
   }
 
-  .lang-btn {
-    min-width: 56px;
-    font-weight: 700;
-    color: var(--surface-solid);
-    background: color-mix(in srgb, var(--surface-solid) 15%, transparent);
-    border-radius: var(--radius-pill);
-  }
-
-  .theme-btn {
+  .header-tools {
     position: absolute;
     left: 16px;
     z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .auth-btn {
+    font-weight: 700;
+  }
+
+  .lang-btn {
+    --rb-padding: 8px 12px;
+    min-width: 52px;
+    font-weight: 700;
   }
 
   .brand-btn {
@@ -115,6 +121,10 @@
     }
 
     .theme-btn {
+      position: static;
+    }
+
+    .header-tools {
       position: static;
       margin-right: auto;
     }

@@ -3,59 +3,62 @@
   <span class="brand-text">{{ 'header.brand' | translate }}</span>
 </app-round-button>
 
-<app-round-button class="header-btn theme-btn" [iconOnly]="true" (clicked)="toggleTheme()">
-  <app-icon [name]="nextThemeIcon()" [size]="22" [ariaLabel]="nextThemeLabelKey() | translate" />
-</app-round-button>
+<div class="header-tools">
+  <app-round-button class="header-btn theme-btn" [iconOnly]="true" (clicked)="toggleTheme()">
+    <app-icon [name]="nextThemeIcon()" [size]="22" [ariaLabel]="nextThemeLabelKey() | translate" />
+  </app-round-button>
 
-<nav class="header-nav">
-  <button
-    class="header-btn lang-btn"
-    type="button"
-    mat-button
-    [matMenuTriggerFor]="languageMenu"
-    [attr.aria-label]="'header.language.menu' | translate"
-  >
+  <app-round-button class="header-btn lang-btn" [active]="true" (clicked)="toggleLanguage()">
     {{ ('header.language.' + currentLanguage()) | translate }}
-  </button>
-
-  <app-round-button
-    class="header-btn"
-    [active]="isActive('/cocktails')"
-    (clicked)="go('/cocktails')"
-  >
-    <app-icon name="list" [size]="25" [ariaLabel]="'header.nav.cocktails' | translate" />
   </app-round-button>
 
   <app-round-button
-    class="header-btn"
-    [active]="isActive('/ingredients')"
-    (clicked)="go('/ingredients')"
-  >
-    <app-icon name="hungerbox-cafe" [size]="25" [ariaLabel]="'header.nav.ingredients' | translate" />
-  </app-round-button>
-
-  <app-round-button
-    class="header-btn cart-btn"
-    [active]="showCartDialog()"
+    class="header-btn auth-btn"
     [iconOnly]="true"
-    (clicked)="toggleCartDialog()"
+    [active]="isLoggedIn() || isActive('/login')"
+    (clicked)="onAuthAction()"
   >
-    <app-icon name="cart" [size]="25" [ariaLabel]="'header.nav.cart' | translate" />
-    @if (likedCount() > 0) {
-      <span class="cart-badge">{{ likedCount() }}</span>
-    }
+    <app-icon
+      [name]="isLoggedIn() ? 'arrow-right-to-bracket-solid-full' : 'circle-user-solid-full'"
+      [size]="22"
+      [ariaLabel]="(isLoggedIn() ? 'header.nav.logout' : 'header.nav.login') | translate"
+    />
   </app-round-button>
-</nav>
+</div>
 
-<mat-menu #languageMenu="matMenu" panelClass="lang-menu-panel">
-  @for (lang of languages; track lang) {
-    <button mat-menu-item type="button" (click)="setLanguage(lang)">
-      {{ ('header.language.' + lang) | translate }}
-    </button>
-  }
-</mat-menu>
+@if (isLoggedIn()) {
+  <nav class="header-nav">
+    <app-round-button
+      class="header-btn"
+      [active]="isActive('/cocktails')"
+      (clicked)="go('/cocktails')"
+    >
+      <app-icon name="list" [size]="25" [ariaLabel]="'header.nav.cocktails' | translate" />
+    </app-round-button>
 
-@if (showCartDialog()) {
+    <app-round-button
+      class="header-btn"
+      [active]="isActive('/ingredients')"
+      (clicked)="go('/ingredients')"
+    >
+      <app-icon name="hungerbox-cafe" [size]="25" [ariaLabel]="'header.nav.ingredients' | translate" />
+    </app-round-button>
+
+    <app-round-button
+      class="header-btn cart-btn"
+      [active]="showCartDialog()"
+      [iconOnly]="true"
+      (clicked)="toggleCartDialog()"
+    >
+      <app-icon name="cart" [size]="25" [ariaLabel]="'header.nav.cart' | translate" />
+      @if (likedCount() > 0) {
+        <span class="cart-badge">{{ likedCount() }}</span>
+      }
+    </app-round-button>
+  </nav>
+}
+
+@if (isLoggedIn() && showCartDialog()) {
   <div class="cart-dialog-backdrop" (click)="closeCartDialog()">
     <div class="cart-dialog card" (click)="$event.stopPropagation()">
       <div class="cart-dialog__head">

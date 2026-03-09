@@ -1,0 +1,213 @@
+:host {
+  display: block;
+
+  .auth-shell {
+    min-height: calc(100vh - 180px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    gap: 20px;
+    align-items: stretch;
+    padding: clamp(16px, 3vw, 28px);
+  }
+
+  .auth-card {
+    display: grid;
+    align-content: center;
+    gap: 24px;
+    border: 1px solid var(--border-soft);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-solid) 90%, transparent), var(--surface-card));
+    box-shadow: var(--shadow-panel);
+
+    &__head {
+      display: grid;
+      gap: 10px;
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.55;
+        color: var(--text-dim);
+      }
+    }
+
+    &__eyebrow {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--primary);
+    }
+  }
+
+  .auth-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+
+    &__full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .auth-form {
+    display: grid;
+    gap: 16px;
+
+    &__field {
+      display: grid;
+      gap: 8px;
+    }
+
+    &__error {
+      margin: 0;
+      color: var(--danger-700);
+      font-size: 0.9rem;
+    }
+
+    &__caption {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 0.92rem;
+    }
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+
+      a {
+        color: var(--primary);
+        font-weight: 700;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .auth-link-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-soft);
+    background: color-mix(in srgb, var(--surface-soft) 84%, transparent);
+    color: var(--text-color);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    transition:
+      background-color 0.18s ease,
+      color 0.18s ease,
+      transform 0.18s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--primary) 16%, var(--surface-soft));
+      color: var(--text-contrast);
+      transform: translateY(-1px);
+    }
+  }
+
+  .auth-submit {
+    border: 0;
+    min-height: 52px;
+    padding: 0 22px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(135deg, var(--primary), var(--dark));
+    color: var(--surface-solid);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-lift);
+    transition:
+      transform 0.18s ease,
+      opacity 0.18s ease;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      cursor: wait;
+      opacity: var(--opacity-disabled);
+    }
+  }
+
+  .auth-side {
+    display: flex;
+    align-items: stretch;
+
+    &__panel {
+      width: 100%;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      padding: clamp(24px, 4vw, 38px);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-muted);
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--header-bg) 76%, transparent), color-mix(in srgb, var(--surface-app-dark) 80%, transparent)),
+        radial-gradient(circle at top left, color-mix(in srgb, var(--primary) 24%, transparent), transparent 34%);
+      color: var(--text-soft-strong);
+      box-shadow: var(--shadow-panel);
+
+      h2,
+      p {
+        margin: 0;
+      }
+    }
+
+    &__eyebrow {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--footer-subtle);
+    }
+
+    &__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      span {
+        padding: 10px 14px;
+        border-radius: var(--radius-pill);
+        border: 1px solid color-mix(in srgb, var(--surface-solid) 18%, transparent);
+        background: color-mix(in srgb, var(--surface-solid) 12%, transparent);
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  :host {
+    .auth-shell {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  :host {
+    .auth-shell {
+      padding: 14px;
+      gap: 14px;
+    }
+
+    .auth-grid {
+      grid-template-columns: 1fr;
+
+      &__full {
+        grid-column: auto;
+      }
+    }
+  }
+}

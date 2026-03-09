@@ -1,7 +1,6 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from '../../../Services/auth.service';
 import { I18nService } from '../../../Services/i18n.service';
 import { Icon } from '../icon/icon';
 import { RoundButton } from '../buttons/round-button/round-button';
@@ -13,11 +12,12 @@ import { AppLanguage } from '../../../i18n/types';
 
 @Component({
   selector: 'app-header',
-  imports: [Icon, RoundButton, Cart, TranslatePipe, MatMenuModule, MatButtonModule],
+  imports: [Icon, RoundButton, Cart, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly likedCocktailsService = inject(LikedCocktailsService);
   private readonly i18nService = inject(I18nService);
@@ -28,7 +28,7 @@ export class Header {
   readonly likedCocktails = computed(() => this.likedCocktailsService.likedCocktails());
   readonly likedCount = computed(() => this.likedCocktailsService.likedCount());
   readonly currentLanguage = computed(() => this.i18nService.language());
-  readonly languages = this.i18nService.languages();
+  readonly isLoggedIn = this.authService.isLoggedIn;
 
   go(path: string): void {
     this.router.navigateByUrl(path);
@@ -57,6 +57,20 @@ export class Header {
 
   setLanguage(language: AppLanguage): void {
     this.i18nService.setLanguage(language);
+  }
+
+  toggleLanguage(): void {
+    this.setLanguage(this.currentLanguage() === 'fr' ? 'en' : 'fr');
+  }
+
+  async onAuthAction(): Promise<void> {
+    if (this.isLoggedIn()) {
+      await this.authService.logout();
+      this.router.navigateByUrl('/home');
+      return;
+    }
+
+    this.router.navigateByUrl('/login');
   }
 
   toggleTheme(): void {

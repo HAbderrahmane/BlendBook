@@ -1,0 +1,63 @@
+<section class="auth-shell">
+  <article class="auth-hero">
+    <p class="auth-hero__eyebrow">{{ 'auth.common.kicker' | translate }}</p>
+    <h1>{{ 'auth.login.heroTitle' | translate }}</h1>
+    <p class="auth-hero__copy">{{ pageDescription() }}</p>
+
+    <ul class="auth-hero__benefits">
+      <li>{{ 'auth.common.benefit.fast' | translate }}</li>
+      <li>{{ 'auth.common.benefit.jwt' | translate }}</li>
+      <li>{{ 'auth.common.benefit.demo' | translate }}</li>
+    </ul>
+  </article>
+
+  <article class="auth-card card">
+    <div class="auth-card__head">
+      <p class="auth-card__eyebrow">{{ 'auth.login.eyebrow' | translate }}</p>
+      <h2>{{ 'auth.login.formTitle' | translate }}</h2>
+      <p>{{ 'auth.login.formDescription' | translate }}</p>
+    </div>
+
+    <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+      <div class="auth-form__field">
+        <app-input
+          formControlName="email"
+          [label]="'auth.fields.email.label' | translate"
+          [placeholder]="'auth.fields.email.placeholder' | translate"
+          [required]="true"
+          type="email"
+          autocomplete="email"
+        />
+        @if (errorMessage('email'); as error) {
+          <p class="auth-form__error">{{ error }}</p>
+        }
+      </div>
+
+      <div class="auth-form__field">
+        <app-input
+          formControlName="password"
+          [label]="'auth.fields.password.label' | translate"
+          [placeholder]="'auth.fields.password.placeholder' | translate"
+          [required]="true"
+          type="password"
+          autocomplete="current-password"
+        />
+        @if (errorMessage('password'); as error) {
+          <p class="auth-form__error">{{ error }}</p>
+        }
+      </div>
+
+      <div class="auth-form__meta">
+        <p>{{ 'auth.login.hint' | translate }}</p>
+        <a class="auth-link-pill" routerLink="/register">
+          <app-icon name="user-plus-solid-full" [size]="18" [ariaLabel]="'auth.register.submit' | translate" />
+          {{ 'auth.login.switchCta' | translate }}
+        </a>
+      </div>
+
+      <button class="auth-submit" type="submit" [disabled]="submitting()">
+        {{ (submitting() ? 'auth.common.submitting' : 'auth.login.submit') | translate }}
+      </button>
+    </form>
+  </article>
+</section>
