@@ -1,59 +1,72 @@
-# Cocktails
+# Cocktail Atelier
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+Cocktail Atelier is an Angular app for browsing cocktails and ingredients with a visual, theme-aware interface.
 
-## Development server
+It includes:
 
-To start a local development server, run:
+- a paginated cocktails list
+- category and glass filtering
+- cocktail details with responsive mobile layout
+- ingredients browsing with expandable details
+- FR / EN language switch
+- theme switching
+- liked cocktails and auth-related UI flows
+
+## Website
+
+GitHub Pages URL:
+
+https://valktorian.github.io/BlendBook/
+
+## Tech Stack
+
+- Angular 21
+- SCSS
+- Angular Material
+- Supabase client integration
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the local dev server:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Then open:
 
-## Code scaffolding
+`http://localhost:4200/`
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Build
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Production build:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Build output is generated in `dist/`.
 
-## Running unit tests
+## Tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Run unit tests:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## GitHub Pages
 
-For end-to-end (e2e) testing, run:
+For GitHub Pages deployment, the app must be built with the repository base href:
 
 ```bash
-ng e2e
+ng build --configuration production --base-href /Blendbook/
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Then publish the generated files from `dist/` to the GitHub Pages branch or workflow target used by the repository.
